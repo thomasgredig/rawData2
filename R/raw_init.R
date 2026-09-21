@@ -18,7 +18,12 @@ raw_init <- function() {
     message("Created directory: ", rawdata_dir)
   } else {
     message("Directory already exists: ", rawdata_dir)
+    d_paths = raw_paths_read()
+    message("Found ", nrow(d_paths), " paths.")
+    d_files <- raw_files_read()
+    message("Found ", nrow(d_files), " files")
   }
 
   normalizePath(rawdata_dir, mustWork = TRUE)
 }
+

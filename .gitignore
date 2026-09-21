@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+/.rawdata2
+_main.R
