@@ -1,3 +1,7 @@
+# rawdata2 0.1.0
+
+* add columns to paths to include GIT username and date
+
 # rawData2 0.0.1
 
 * init `.rawdata2` directory
