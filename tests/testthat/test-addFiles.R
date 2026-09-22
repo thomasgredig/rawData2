@@ -57,6 +57,9 @@ test_that("raw_update finds random RAW files", {
   result <- raw_update()
 
   # Verify the results.
+  # ===================
+  # test raw_update works
+  # ===================
   expect_equal(nrow(result), N)
   expect_equal(sum(result$found), N)
   expect_equal(length(unique(result$ID)), N)
@@ -93,6 +96,32 @@ test_that("raw_update finds random RAW files", {
   result <- raw_update()
   ID_new <- raw_id_by_file("new43f")
   expect_equal(ID, ID_new)
+
+  # read paths:
+  d_paths <- raw_paths_read()
+  expect_equal(nrow(d_paths), 2)
+
+  # move one file to another folder and check that the ID remains the same
+  raw_source_dir_sub <- file.path(test_dir, "_folder")
+  dir.create(
+    raw_source_dir_sub,
+    recursive = TRUE,
+    showWarnings = FALSE
+  )
+  ID <- raw_id_by_file(basename(files[7]))[1]
+  new_filename = file.path(raw_source_dir_sub, basename(files[7]))
+  file.rename(from = files[7], to=new_filename)
+  result <- raw_update()
+  raw_init() # just for testing init again, then update again
+  result <- raw_update()
+  ID_new <- raw_id_by_file(basename(files[7]))[1]
+  expect_equal(ID, ID_new)
+
+  f <- raw_file_by_id(7)
+  expect_true(nchar(f)>0)
+
+  d <- raw_file_record_by_id(7)
+  expect_equal(ncol(d), 4L)
 
   # Verify that the catalogue was saved.
   expect_true(

@@ -1,6 +1,8 @@
 # rawdata2 0.1.0
 
+* update tests
 * add columns to paths to include GIT username and date
+* `raw_path_trim()` removes any invalid paths
 
 # rawData2 0.0.1
 

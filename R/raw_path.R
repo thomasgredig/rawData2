@@ -32,8 +32,7 @@ raw_paths_read <- function() {
 
   paths_df <- read.csv(
     file,
-    stringsAsFactors = FALSE,
-    colClasses = c("character", "logical")
+    stringsAsFactors = FALSE
   )
 
   raw_paths_reduce(paths_df)
@@ -50,21 +49,63 @@ raw_path_append <- function(path, searchable = TRUE) {
     stop("'searchable' must be a single TRUE or FALSE value.")
   }
 
+  file <- raw_paths_file()
+  existing_paths <- raw_paths_read()
+
+  # Ensure older path files have the current columns.
+  if (nrow(existing_paths) == 0) {
+    existing_paths <- data.frame(
+      ID = integer(),
+      path = character(),
+      searchable = logical(),
+      user = character(),
+      date = character(),
+      stringsAsFactors = FALSE
+    )
+  } else {
+    if (!"ID" %in% names(existing_paths)) {
+      existing_paths$ID <- seq_len(nrow(existing_paths))
+    }
+
+    if (!"user" %in% names(existing_paths)) {
+      existing_paths$user <- NA_character_
+    }
+
+    if (!"date" %in% names(existing_paths)) {
+      existing_paths$date <- NA_character_
+    }
+
+    existing_paths <- existing_paths[, c(
+      "ID", "path", "searchable", "user", "date"
+    )]
+  }
+
+  # Assign the next available ID.
+  if (nrow(existing_paths) == 0) {
+    new_ID <- 1L
+  } else {
+    new_ID <- max(existing_paths$ID, na.rm = TRUE) + 1L
+  }
+
   new_row <- data.frame(
+    ID = new_ID,
     path = path,
     searchable = searchable,
+    user = git_username(),
+    date = as.character(Sys.Date()),
     stringsAsFactors = FALSE
   )
 
-  file <- raw_paths_file()
-
-  existing_paths <- raw_paths_read()
   all_paths <- rbind(existing_paths, new_row)
 
-  # Remove duplicates and paths covered by parent directories.
+  # Remove duplicate paths and paths covered by parent directories.
   all_paths <- raw_paths_reduce(all_paths)
 
-  # Rewrite the CSV because adding a parent may remove existing children.
+  # Keep the requested column order.
+  all_paths <- all_paths[, c(
+    "ID", "path", "searchable", "user", "date"
+  )]
+
   write.csv(
     all_paths,
     file = file,
@@ -74,6 +115,7 @@ raw_path_append <- function(path, searchable = TRUE) {
 
   invisible(all_paths)
 }
+
 
 
 #' Remove duplicate and redundant RAW paths
@@ -117,4 +159,33 @@ raw_paths_reduce <- function(paths_df) {
   }, logical(1))
 
   paths_df[keep, , drop = FALSE]
+}
+
+
+#' Removes path that do not exist; use with care
+#' @export
+raw_path_trim <- function() {
+  d <- raw_paths_read()
+
+  all_paths = d$path
+  if (!is.character(all_paths)) {
+    stop("raw_paths_read() must return a character vector of paths.")
+  }
+
+  found <- dir.exists(all_paths)
+  removed_paths <- all_paths[!found]
+
+
+  write.csv(
+    d[found,],
+    file =  raw_paths_file(),
+    row.names = FALSE,
+    quote = TRUE
+  )
+
+  if (length(removed_paths) > 0L) {
+    message("Removed ", length(removed_paths), " missing path(s).")
+  }
+
+  invisible(all_paths)
 }
