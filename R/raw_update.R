@@ -4,11 +4,41 @@
 #' @importFrom utils write.csv
 #' @export
 raw_update <- function() {
+  # Read all paths to be searched.
   paths <- raw_paths_read()
-
   # Read the previous catalogue.
   old <- raw_files_read()
 
+  # helper function to remove paths
+  strip_directories <- function(f, p) {
+    f <- unlist(f, use.names = FALSE)
+    p <- unlist(p, use.names = FALSE)
+
+    clean <- function(x) {
+      x <- gsub("\\\\", "/", x)   # normalize Windows paths
+      sub("/+$", "", x)           # remove trailing slash
+    }
+
+    f <- clean(f)
+    p <- clean(p)
+
+    # Match the longest directory prefixes first
+    p <- p[order(nchar(p), decreasing = TRUE)]
+
+    vapply(f, function(file) {
+      matches <- startsWith(file, p) &
+        (nchar(file) == nchar(p) |
+           substr(file, nchar(p) + 1, nchar(p) + 1) == "/")
+
+      if (any(matches)) {
+        sub("^/", "", substring(file, nchar(p[which(matches)[1]]) + 1))
+      } else {
+        file
+      }
+    }, character(1))
+  }
+
+  # create a DF if nothing exists
   if (nrow(old) == 0) {
     old <- data.frame(
       ID = integer(),
@@ -18,24 +48,6 @@ raw_update <- function() {
       stringsAsFactors = FALSE
     )
   } else {
-    # Support older RAW_files.csv files without a `found` column.
-    if (!"ID" %in% names(old)) {
-      old$ID <- seq_len(nrow(old))
-    }
-
-    if (!"found" %in% names(old)) {
-      old$found <- FALSE
-    }
-
-    old <- old[, c("ID", "file", "sha256", "found")]
-    old$ID <- as.integer(old$ID)
-    old$file <- as.character(old$file)
-    old$sha256 <- as.character(old$sha256)
-    old$found <- as.logical(old$found)
-
-    # Avoid duplicate catalogue entries for the same content.
-    old <- old[!duplicated(old$sha256), , drop = FALSE]
-
     # Assume that previous files are not found until rediscovered.
     old$found <- FALSE
   }
@@ -103,10 +115,11 @@ raw_update <- function() {
       old$file[old_index[matched]] <- current$file[matched]
     }
 
+
     # New content: assign new IDs.
     if (any(!matched)) {
       if (nrow(old) == 0 || all(is.na(old$ID))) {
-        next_id <- 1L
+        next_id <- 7L
       } else {
         next_id <- max(old$ID, na.rm = TRUE) + 1L
       }
@@ -125,6 +138,7 @@ raw_update <- function() {
       )
 
       old <- rbind(old, new_rows)
+      old$file <- strip_directories(old$file, paths$path)
     }
   }
 

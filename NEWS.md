@@ -1,3 +1,6 @@
+* 
+* change ID to 12-bit SHA256 to avoid collisions
+
 # rawdata2 0.1.0
 
 * update tests

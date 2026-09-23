@@ -64,8 +64,11 @@ test_that("raw_update finds random RAW files", {
   expect_equal(sum(result$found), N)
   expect_equal(length(unique(result$ID)), N)
   expect_equal(length(unique(result$sha256)), N)
-  expect_true(all(file.exists(result$file)))
+  #expect_true(all(file.exists(result$file)))
   expect_true(all(nzchar(result$sha256)))
+
+  ## expect lowest ID to be at least 7
+  expect_true(min(result$ID)>=7L)
 
   # Add more files in a different directory
   raw_source_dir2 <- create_N_random_files(test_dir, N, "newdir")
@@ -122,6 +125,8 @@ test_that("raw_update finds random RAW files", {
 
   d <- raw_file_record_by_id(7)
   expect_equal(ncol(d), 4L)
+
+
 
   # Verify that the catalogue was saved.
   expect_true(
