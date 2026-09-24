@@ -124,9 +124,7 @@ test_that("raw_update finds random RAW files", {
   expect_true(nchar(f)>0)
 
   d <- raw_file_record_by_id(7)
-  expect_equal(ncol(d), 4L)
-
-
+  expect_equal(ncol(d), 5L)
 
   # Verify that the catalogue was saved.
   expect_true(

@@ -4,7 +4,7 @@
 \alias{raw_update}
 \title{Update the RAW file catalogue with SHA-256 checksums}
 \usage{
-raw_update()
+raw_update(verbose = TRUE)
 }
 \description{
 Update the RAW file catalogue with SHA-256 checksums

@@ -21,6 +21,33 @@ raw_file_by_id <- function(ID) {
   raw_files$file[match_index]
 }
 
+#' Retrieve a RAW filename by ID2
+#' @export
+raw_find_ID <- function(ID2) {
+  raw_files <- raw_files_read()
+
+  if (nrow(raw_files) == 0) {
+    return(NA_character_)
+  }
+
+  match_index = which(raw_files$ID2 == ID2)
+
+  if (length(match_index)==0) {
+    warning("No RAW file found with ID: ", ID2)
+    return(NA_character_)
+  }
+
+  filename = raw_files$file[match_index]
+  fullname <- filename
+
+  raw_paths <- raw_paths_read()
+  for(p in raw_paths$path) {
+    fullname = file.path(p, filename)
+    if (file.exists(fullname)) break
+  }
+  fullname
+}
+
 
 #' Retrieve file and SHA
 #' @export
@@ -75,3 +102,4 @@ raw_id_by_file <- function(filename,
 
   as.integer(IDs)
 }
+

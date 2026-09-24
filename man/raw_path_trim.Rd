@@ -4,7 +4,7 @@
 \alias{raw_path_trim}
 \title{Removes path that do not exist; use with care}
 \usage{
-raw_path_trim(file)
+raw_path_trim()
 }
 \description{
 Removes path that do not exist; use with care

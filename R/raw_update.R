@@ -3,7 +3,7 @@
 #' @importFrom digest digest
 #' @importFrom utils write.csv
 #' @export
-raw_update <- function() {
+raw_update <- function(verbose=TRUE) {
   # Read all paths to be searched.
   paths <- raw_paths_read()
   # Read the previous catalogue.
@@ -42,6 +42,7 @@ raw_update <- function() {
   if (nrow(old) == 0) {
     old <- data.frame(
       ID = integer(),
+      ID2 = character(),
       file = character(),
       sha256 = character(),
       found = logical(),
@@ -125,12 +126,14 @@ raw_update <- function() {
       }
 
       new_files <- current[!matched, , drop = FALSE]
+      IDs <- seq.int(
+        from = next_id,
+        length.out = nrow(new_files)
+      )
 
       new_rows <- data.frame(
-        ID = seq.int(
-          from = next_id,
-          length.out = nrow(new_files)
-        ),
+        ID = IDs,
+        ID2 = base64(strtoi(substr(new_files$sha256, 1, 7),16L)),
         file = new_files$file,
         sha256 = new_files$sha256,
         found = TRUE,
@@ -142,10 +145,13 @@ raw_update <- function() {
     }
   }
 
+
   raw_files_file <- file.path(
     dirname(raw_paths_file()),
     "RAW_files.csv"
   )
+
+  ## create
 
   write.csv(
     old,

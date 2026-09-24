@@ -1,5 +1,7 @@
-* 
-* change ID to 12-bit SHA256 to avoid collisions
+# rawdata2 0.1.1
+
+* implement 6-character Base64 alternative ID as `ID2`
+* add a processing dot for `raw_update`
 
 # rawdata2 0.1.0
 
