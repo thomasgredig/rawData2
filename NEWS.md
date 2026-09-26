@@ -1,3 +1,12 @@
+# rawdata2 0.2.0
+
+
+* add import and export of RAWdata register
+* add `raw_info()` for information about an ID
+* add `raw_find()` to search for IDs from a list of filenames (partial)
+* return full filename based on ID or ID2
+* update README.md with workflow
+
 # rawdata2 0.1.1
 
 * implement 6-character Base64 alternative ID as `ID2`

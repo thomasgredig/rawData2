@@ -1,4 +1,5 @@
 #' Read the RAW file catalogue
+#' @importFrom utils read.csv
 #' @export
 raw_files_read <- function() {
   raw_files_file <- file.path(

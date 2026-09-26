@@ -2,10 +2,10 @@
 % Please edit documentation in R/git_username.R
 \name{git_username}
 \alias{git_username}
-\title{Get the configured Git username}
+\title{Get the configured Git username or system's username}
 \usage{
 git_username()
 }
 \description{
-Get the configured Git username
+Get the configured Git username or system's username
 }

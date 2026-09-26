@@ -1,3 +1,7 @@
+#' Converts a number to a base64 string
+#' @description
+#' This makes a number shorter while using mostly letters and numbers with only two symbols
+#'
 #' @noRd
 base64 <- function(numbers) {
 

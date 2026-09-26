@@ -6,6 +6,9 @@
 \usage{
 raw_file_by_id(ID)
 }
+\arguments{
+\item{ID}{could be either numeric ID or base64 ID2}
+}
 \description{
 Retrieve a RAW filename by ID
 }

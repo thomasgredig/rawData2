@@ -1,105 +1,61 @@
 #' Retrieve a RAW filename by ID
+#' @param ID could be either numeric ID or base64 ID2
 #' @export
 raw_file_by_id <- function(ID) {
-  if (length(ID) != 1 || is.na(ID)) {
-    stop("'ID' must be a single non-missing value.")
-  }
+  match_index <- raw_idxByID(ID)
 
   raw_files <- raw_files_read()
-
-  if (nrow(raw_files) == 0) {
-    return(NA_character_)
+  filename <- raw_files$file[match_index]
+  if (file.exists(filename)) {
+    f <- normalizePath(filename, winslash = "/", mustWork = FALSE)
+    return(f)
   }
-
-  match_index <- match(as.integer(ID), as.integer(raw_files$ID))
-
-  if (is.na(match_index)) {
-    warning("No RAW file found with ID: ", ID)
-    return(NA_character_)
-  }
-
-  raw_files$file[match_index]
-}
-
-#' Retrieve a RAW filename by ID2
-#' @export
-raw_find_ID <- function(ID2) {
-  raw_files <- raw_files_read()
-
-  if (nrow(raw_files) == 0) {
-    return(NA_character_)
-  }
-
-  match_index = which(raw_files$ID2 == ID2)
-
-  if (length(match_index)==0) {
-    warning("No RAW file found with ID: ", ID2)
-    return(NA_character_)
-  }
-
-  filename = raw_files$file[match_index]
-  fullname <- filename
 
   raw_paths <- raw_paths_read()
-  for(p in raw_paths$path) {
-    fullname = file.path(p, filename)
-    if (file.exists(fullname)) break
-  }
-  fullname
-}
 
-
-#' Retrieve file and SHA
-#' @export
-raw_file_record_by_id <- function(ID) {
-  raw_files <- raw_files_read()
-
-  result <- raw_files[raw_files$ID == ID, , drop = FALSE]
-
-  if (nrow(result) == 0) {
-    warning("No RAW file found with ID: ", ID)
-    return(NULL)
+  if (nrow(raw_paths) == 0L || !"path" %in% names(raw_paths)) {
+    warning("No RAW search paths are registered.")
+    return(NA_character_)
   }
 
-  result
-}
-
-
-
-
-#' Retrieve RAW file IDs by filename or partial filename
-#' @export
-raw_id_by_file <- function(filename,
-                           ignore.case = FALSE,
-                           found_only = FALSE) {
-  if (length(filename) != 1 || !is.character(filename)) {
-    stop("'filename' must be a single character string.")
+  # Restrict the search to paths marked searchable, if that column exists.
+  if ("searchable" %in% names(raw_paths)) {
+    raw_paths <- raw_paths[
+      !is.na(raw_paths$searchable) & raw_paths$searchable,
+      ,
+      drop = FALSE
+    ]
   }
 
-  raw_files <- raw_files_read()
+  # Only search directories that currently exist.
+  raw_paths <- raw_paths[
+    !is.na(raw_paths$path) & dir.exists(raw_paths$path),
+    ,
+    drop = FALSE
+  ]
 
-  if (nrow(raw_files) == 0) {
-    return(integer())
+  if (nrow(raw_paths) == 0L) {
+    warning("None of the registered RAW paths exist.")
+    return(NA_character_)
   }
 
-  matches <- grepl(
-    filename,
-    raw_files$file,
-    fixed = TRUE,
-    ignore.case = ignore.case
-  )
+  candidate_paths <- file.path(raw_paths$path, filename)
+  found <- file.exists(candidate_paths)
 
-  if (found_only && "found" %in% names(raw_files)) {
-    matches <- matches & raw_files$found
+  if (!any(found)) {
+    warning("File not found in any registered RAW path: ", filename)
+    return(NA_character_)
   }
 
-  IDs <- raw_files$ID[matches]
+  matches <- candidate_paths[found]
 
-  if (length(IDs) == 0) {
-    warning("No RAW file matched: ", filename)
-    return(integer())
+  if (length(matches) > 1L) {
+    warning(
+      "File found in multiple RAW paths; returning the first match: ",
+      filename
+    )
   }
 
-  as.integer(IDs)
+  normalizePath(matches[1L], winslash = "/", mustWork = FALSE)
 }
 

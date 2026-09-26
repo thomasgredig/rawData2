@@ -2,16 +2,28 @@
 
 export(find_raw_root)
 export(git_username)
+export(raw_export_register)
 export(raw_file_by_id)
 export(raw_file_record_by_id)
 export(raw_files_read)
+export(raw_find)
 export(raw_find_ID)
 export(raw_id_by_file)
+export(raw_import_register)
+export(raw_info)
 export(raw_init)
+export(raw_list)
 export(raw_path_append)
 export(raw_path_trim)
 export(raw_paths_file)
 export(raw_paths_read)
 export(raw_update)
 importFrom(digest,digest)
-importFrom(utils,write.csv)
+importFrom(dplyr,
+  mutate,
+  select
+)
+importFrom(utils,
+  read.csv,
+  write.csv
+)

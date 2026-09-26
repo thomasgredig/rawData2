@@ -1,4 +1,4 @@
-#' Get the configured Git username
+#' Get the configured Git username or system's username
 #' @export
 git_username <- function() {
   result <- tryCatch(
@@ -12,13 +12,14 @@ git_username <- function() {
   )
 
   if (length(result) == 0) {
-    return(NA_character_)
+    username <- Sys.info()[["user"]]
+    return(username)
   }
 
   username <- trimws(result[[1]])
 
   if (identical(username, "")) {
-    NA_character_
+    return(NA_character_)
   } else {
     username
   }

@@ -18,7 +18,8 @@ test_that("find root directory", {
   p <- raw_paths_read()
   expect_warning({result=raw_update()})
   expect_equal(nrow(result),0L)
-  f <- raw_file_by_id(8778)
+  expect_warning({f <- raw_file_by_id(8778)})
+
   expect_true(is.na(f))
   expect_warning({f <- raw_file_record_by_id(88)})
   expect_true(is.null(f))

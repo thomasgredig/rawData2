@@ -1,4 +1,5 @@
 #' Data file with RAW paths
+#' @importFrom utils read.csv
 #' @export
 raw_paths_file <- function() {
   root_dir <- find_raw_root()

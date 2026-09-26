@@ -4,7 +4,10 @@
 \alias{raw_update}
 \title{Update the RAW file catalogue with SHA-256 checksums}
 \usage{
-raw_update(verbose = TRUE)
+raw_update(paths = c())
+}
+\arguments{
+\item{paths}{list of paths with data files}
 }
 \description{
 Update the RAW file catalogue with SHA-256 checksums

@@ -1,9 +1,13 @@
 #' Update the RAW file catalogue with SHA-256 checksums
-#'
+#' @param paths list of paths with data files
 #' @importFrom digest digest
 #' @importFrom utils write.csv
 #' @export
-raw_update <- function(verbose=TRUE) {
+raw_update <- function(paths = c()) {
+  # Update paths
+  for(path in paths) {
+    raw_path_append(path)
+  }
   # Read all paths to be searched.
   paths <- raw_paths_read()
   # Read the previous catalogue.
@@ -145,24 +149,28 @@ raw_update <- function(verbose=TRUE) {
     }
   }
 
-
-  raw_files_file <- file.path(
-    dirname(raw_paths_file()),
-    "RAW_files.csv"
-  )
-
-  ## create
-
-  write.csv(
-    old,
-    raw_files_file,
-    row.names = FALSE,
-    quote = TRUE
-  )
+  raw_files_file <- rawFilesSave(old)
 
   message("Updated RAW file catalogue: ", raw_files_file)
   message("Number of catalogue entries: ", nrow(old))
   message("Number of files currently found: ", sum(old$found))
 
   invisible(old)
+}
+
+#' @noRd
+rawFilesSave <- function(df_files) {
+  raw_files_file <- file.path(
+    dirname(raw_paths_file()),
+    "RAW_files.csv"
+  )
+
+  write.csv(
+    df_files,
+    raw_files_file,
+    row.names = FALSE,
+    quote = TRUE
+  )
+
+  raw_files_file
 }
