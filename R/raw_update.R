@@ -1,11 +1,20 @@
-#' Update the RAW file catalogue with SHA-256 checksums
+#' Update the RAW file catalogue with SHA-256 checksums and file sizes
 #' @param paths A character vector of paths to register before updating the
 #'   catalogue.
-#' @return Invisibly, the updated RAW file catalogue as a data frame.
+#' @param fastScan Logical; if `TRUE`, reuse a registered SHA-256 checksum
+#'   when the file has the same registered path and filesize. Files without a
+#'   matching path and filesize are still hashed.
+#' @return Invisibly, the updated RAW file catalogue as a data frame. The
+#'   `filesize` column contains the size of each found file in bytes and is
+#'   `NA` for files that are not currently found.
 #' @importFrom digest digest
 #' @importFrom utils write.csv
 #' @export
-raw_update <- function(paths = c()) {
+raw_update <- function(paths = c(), fastScan = TRUE) {
+  if (length(fastScan) != 1L || !is.logical(fastScan) || is.na(fastScan)) {
+    stop("'fastScan' must be a single TRUE or FALSE value.")
+  }
+
   # Update paths
   for(path in paths) {
     raw_path_append(path)
@@ -51,10 +60,15 @@ raw_update <- function(paths = c()) {
       ID2 = character(),
       file = character(),
       sha256 = character(),
+      filesize = numeric(),
       found = logical(),
       stringsAsFactors = FALSE
     )
   } else {
+    if (!"filesize" %in% names(old)) {
+      old$filesize <- NA_real_
+    }
+
     # Assume that previous files are not found until rediscovered.
     old$found <- FALSE
   }
@@ -91,19 +105,31 @@ raw_update <- function(paths = c()) {
   files <- unique(normalizePath(files, mustWork = TRUE))
 
   if (length(files) > 0) {
+    relative_files <- strip_directories(files, paths$path)
+    file_sizes <- as.numeric(file.size(files))
+    previous_index <- match(relative_files, old$file)
+
+    can_reuse <- fastScan &
+      !is.na(previous_index) &
+      !is.na(old$filesize[previous_index]) &
+      old$filesize[previous_index] == file_sizes
+
+    checksums <- vapply(seq_along(files), function(i) {
+      if (can_reuse[i]) {
+        old$sha256[previous_index[i]]
+      } else {
+        digest(
+          files[[i]],
+          algo = "sha256",
+          file = TRUE
+        )
+      }
+    }, character(1))
+
     current <- data.frame(
-      file = files,
-      sha256 = vapply(
-        files,
-        function(f) {
-          digest(
-            f,
-            algo = "sha256",
-            file = TRUE
-          )
-        },
-        character(1)
-      ),
+      file = relative_files,
+      filesize = file_sizes,
+      sha256 = checksums,
       stringsAsFactors = FALSE
     )
 
@@ -123,6 +149,7 @@ raw_update <- function(paths = c()) {
     if (any(matched)) {
       old$found[old_index[matched]] <- TRUE
       old$file[old_index[matched]] <- current$file[matched]
+      old$filesize[old_index[matched]] <- current$filesize[matched]
     }
 
 
@@ -145,12 +172,12 @@ raw_update <- function(paths = c()) {
         ID2 = base64(strtoi(substr(new_files$sha256, 1, 7),16L)),
         file = new_files$file,
         sha256 = new_files$sha256,
+        filesize = new_files$filesize,
         found = TRUE,
         stringsAsFactors = FALSE
       )
 
       old <- rbind(old, new_rows)
-      old$file <- strip_directories(old$file, paths$path)
     }
   }
 

@@ -4,14 +4,17 @@
 \alias{raw_list}
 \title{Lists all available files}
 \usage{
-raw_list(nLEN = 40)
+raw_list(nLEN = 40, found = TRUE)
 }
 \arguments{
 \item{nLEN}{Maximum number of trailing characters to show for each filename.}
+
+\item{found}{Logical; if \code{TRUE}, return files currently marked as found. If
+\code{FALSE}, return files that are not currently found.}
 }
 \value{
 A data frame containing the ID, ID2, final directory component, and
-shortened filename for files currently marked as found.
+shortened filename for the files selected by \code{found}.
 }
 \description{
 Lists all available files

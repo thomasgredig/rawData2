@@ -52,7 +52,7 @@ raw_file_by_id <- function(ID) {
   matches <- candidate_paths[found]
 
   if (length(matches) > 1L) {
-    warning(
+    message(
       "File found in multiple RAW paths; returning the first match: ",
       filename
     )

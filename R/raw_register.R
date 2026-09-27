@@ -58,6 +58,23 @@ raw_import_register <- function(recursive=FALSE) {
 #' @param df2 The second RAW file catalogue data frame.
 #' @return A merged catalogue with duplicate `ID2` entries removed.
 raw_merge <- function(df1, df2) {
+  if (!"filesize" %in% names(df1)) {
+    df1$filesize <- NA_real_
+  }
+  if (!"filesize" %in% names(df2)) {
+    df2$filesize <- NA_real_
+  }
+
+  columns <- union(names(df1), names(df2))
+  for (column in setdiff(columns, names(df1))) {
+    df1[[column]] <- NA
+  }
+  for (column in setdiff(columns, names(df2))) {
+    df2[[column]] <- NA
+  }
+  df1 <- df1[, columns, drop = FALSE]
+  df2 <- df2[, columns, drop = FALSE]
+
   df <- rbind(df1,df2)
   df <- df[!duplicated(df$ID2),]
 

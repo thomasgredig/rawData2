@@ -2,17 +2,23 @@
 % Please edit documentation in R/raw_update.R
 \name{raw_update}
 \alias{raw_update}
-\title{Update the RAW file catalogue with SHA-256 checksums}
+\title{Update the RAW file catalogue with SHA-256 checksums and file sizes}
 \usage{
-raw_update(paths = c())
+raw_update(paths = c(), fastScan = TRUE)
 }
 \arguments{
 \item{paths}{A character vector of paths to register before updating the
 catalogue.}
+
+\item{fastScan}{Logical; if \code{TRUE}, reuse a registered SHA-256 checksum
+when the file has the same registered path and filesize. Files without a
+matching path and filesize are still hashed.}
 }
 \value{
-Invisibly, the updated RAW file catalogue as a data frame.
+Invisibly, the updated RAW file catalogue as a data frame. The
+\code{filesize} column contains the size of each found file in bytes and is
+\code{NA} for files that are not currently found.
 }
 \description{
-Update the RAW file catalogue with SHA-256 checksums
+Update the RAW file catalogue with SHA-256 checksums and file sizes
 }

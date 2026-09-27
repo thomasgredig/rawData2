@@ -1,3 +1,9 @@
+# rawdata2 0.2.1
+
+* add `found` parameter to `raw_list()` to list found or missing files
+* save the size in bytes of each found file in the RAW file catalogue
+* add `fastScan` to `raw_update()` to reuse checksums for unchanged-size files
+
 # rawdata2 0.2.0
 
 * add import and export of RAWdata register

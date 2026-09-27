@@ -37,6 +37,30 @@ test_that("raw_update finds random RAW files", {
     setwd(old_wd)
     unlink(test_dir, recursive = TRUE, force = TRUE)
   })
+
+  test_that("raw_update fastScan reuses same-size file checksums", {
+    old_wd <- getwd()
+    test_dir <- tempfile("raw-fast-scan-")
+    dir.create(test_dir, recursive = TRUE)
+    on.exit({
+      setwd(old_wd)
+      unlink(test_dir, recursive = TRUE, force = TRUE)
+    })
+    setwd(test_dir)
+
+    raw_init()
+    raw_source_dir <- create_N_random_files(test_dir, 1L)
+    initial <- raw_update(raw_source_dir)
+    scan_file <- file.path(raw_source_dir, "random_001.txt")
+    old_hash <- initial$sha256[initial$file == "random_001.txt"]
+
+    writeLines(strrep("z", 100), scan_file)
+    fast <- raw_update()
+    expect_equal(fast$sha256[fast$file == "random_001.txt"], old_hash)
+
+    full <- raw_update(fastScan = FALSE)
+    expect_true(any(full$found & full$sha256 != old_hash))
+  })
   setwd(test_dir)
 
   # Create a minimal DataLad-like dataset marker.
@@ -66,6 +90,7 @@ test_that("raw_update finds random RAW files", {
   expect_equal(length(unique(result$sha256)), N)
   #expect_true(all(file.exists(result$file)))
   expect_true(all(nzchar(result$sha256)))
+  expect_true(all(result$filesize > 0))
 
   ## expect lowest ID to be at least 7
   expect_true(min(result$ID)>=7L)
@@ -124,7 +149,9 @@ test_that("raw_update finds random RAW files", {
   expect_true(nchar(f)>0)
 
   d <- raw_file_record_by_id(7)
-  expect_equal(ncol(d), 5L)
+  expect_equal(ncol(d), 6L)
+  expect_true(is.numeric(d$filesize))
+  expect_true(d$filesize > 0)
 
   # Verify that the catalogue was saved.
   expect_true(

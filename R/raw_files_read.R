@@ -1,7 +1,6 @@
 #' Read the RAW file catalogue
 #' @return A data frame containing the RAW file catalogue. If the catalogue
-#'   does not exist, an empty data frame with `file` and `sha256` columns is
-#'   returned.
+#'   does not exist, an empty data frame with the catalogue columns is returned.
 #' @importFrom utils read.csv
 #' @export
 raw_files_read <- function() {
@@ -14,16 +13,21 @@ raw_files_read <- function() {
     return(data.frame(
       file = character(),
       sha256 = character(),
+      filesize = numeric(),
       stringsAsFactors = FALSE
     ))
   }
 
-  read.csv(
+  raw_files <- read.csv(
     raw_files_file,
     stringsAsFactors = FALSE,
-    colClasses = c(
-      file = "character",
-      sha256 = "character"
-    )
+    colClasses = c(file = "character", sha256 = "character",
+                   filesize = "numeric")
   )
+
+  if (!"filesize" %in% names(raw_files)) {
+    raw_files$filesize <- NA_real_
+  }
+
+  raw_files
 }
