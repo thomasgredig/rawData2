@@ -88,7 +88,7 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
 
         list.files(
           path = path,
-          pattern = "\\.(tiff|jpg|jpeg|png|ibw|ras|rasx|txt|asc|nid|[0-9]+)$",
+          pattern = "\\.(tiff|jpg|jpeg|png|ibw|ras|rasx|txt|csv|bin|xlsx|docx|asc|nid|[0-9]+)$",
           recursive = TRUE,
           full.names = TRUE,
           include.dirs = FALSE,

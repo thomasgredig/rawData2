@@ -8,8 +8,8 @@ This makes collaborations more effective.
 ## Problem
 
 This package helps solve the problem of copying large numbers of files to a 
-local directory. The example illustrates this by using 1 file from `Alice` 
-and 1 file from `Bob` for a data analysis. Users may use different sub-directories 
+local directory. The simplified example illustrates this by using one file from `Alice` 
+and one file from `Bob` for a data analysis. Users may use different sub-directories 
 or even names to collaborate on the analysis. The analysis code will continue
 to work, even if more files are added or files are moved to other directories.
 

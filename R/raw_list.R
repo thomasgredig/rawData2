@@ -16,5 +16,5 @@ raw_list <- function(nLEN = 40, found = TRUE) {
     mutate(filen=basename(file)) |>
     mutate(filename = substr(filen,nchar(filen)-nLEN+1, nchar(filen))) |>
     mutate(lastpath = basename(dirname(file))) |>
-    select(ID,ID2,lastpath,filename)
+    dplyr::select(ID,ID2,filesize,lastpath,filename)
 }

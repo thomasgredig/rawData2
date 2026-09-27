@@ -1,5 +1,6 @@
 # rawdata2 0.2.1
 
+* load files with certain file extensions only
 * add `found` parameter to `raw_list()` to list found or missing files
 * save the size in bytes of each found file in the RAW file catalogue
 * add `fastScan` to `raw_update()` to reuse checksums for unchanged-size files

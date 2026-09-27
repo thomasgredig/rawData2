@@ -44,7 +44,7 @@ test_that("duplicate and missing files", {
 
   # Register the RAW directory for recursive searching.
   raw_path_append(
-    path = raw_source_dir,
+    path = test_dir,
     searchable = TRUE
   )
 
@@ -61,5 +61,5 @@ test_that("duplicate and missing files", {
   raw_update()
   filename <- raw_file_by_id(ID2)
   expect_equal(length(filename),1L)
-
+  expect_true(file.exists(filename[1]))
 })

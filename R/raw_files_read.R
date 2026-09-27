@@ -11,8 +11,11 @@ raw_files_read <- function() {
 
   if (!file.exists(raw_files_file)) {
     return(data.frame(
+      ID = numeric(),
+      ID2 = character(),
       file = character(),
       sha256 = character(),
+      found = logical(),
       filesize = numeric(),
       stringsAsFactors = FALSE
     ))
@@ -21,7 +24,11 @@ raw_files_read <- function() {
   raw_files <- read.csv(
     raw_files_file,
     stringsAsFactors = FALSE,
-    colClasses = c(file = "character", sha256 = "character",
+    colClasses = c(ID="numeric",
+                   ID2="character",
+                   file = "character",
+                   sha256 = "character",
+                   found = "logical",
                    filesize = "numeric")
   )
 
