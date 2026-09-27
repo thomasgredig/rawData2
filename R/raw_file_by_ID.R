@@ -1,5 +1,7 @@
 #' Retrieve a RAW filename by ID
-#' @param ID could be either numeric ID or base64 ID2
+#' @param ID A numeric catalogue ID or a base64-style `ID2` value.
+#' @return The normalized path to the matching file, or `NA_character_` when
+#'   the file cannot be found.
 #' @export
 raw_file_by_id <- function(ID) {
   match_index <- raw_idxByID(ID)
@@ -58,4 +60,3 @@ raw_file_by_id <- function(ID) {
 
   normalizePath(matches[1L], winslash = "/", mustWork = FALSE)
 }
-

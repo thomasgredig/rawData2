@@ -7,7 +7,11 @@
 raw_list(nLEN = 40)
 }
 \arguments{
-\item{nLEN}{maximum number of characters for file}
+\item{nLEN}{Maximum number of trailing characters to show for each filename.}
+}
+\value{
+A data frame containing the ID, ID2, final directory component, and
+shortened filename for files currently marked as found.
 }
 \description{
 Lists all available files

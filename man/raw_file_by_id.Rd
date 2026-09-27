@@ -7,7 +7,11 @@
 raw_file_by_id(ID)
 }
 \arguments{
-\item{ID}{could be either numeric ID or base64 ID2}
+\item{ID}{A numeric catalogue ID or a base64-style \code{ID2} value.}
+}
+\value{
+The normalized path to the matching file, or \code{NA_character_} when
+the file cannot be found.
 }
 \description{
 Retrieve a RAW filename by ID

@@ -1,4 +1,7 @@
 #' exports the RAWdata register to the target_path
+#' @param target_path A directory in which to write the exported register.
+#' @return The path to the exported register, or `NA_character_` when
+#'   `target_path` does not exist.
 #' @export
 raw_export_register <- function(target_path) {
   if (!dir.exists(target_path)) {
@@ -17,7 +20,9 @@ raw_export_register <- function(target_path) {
 }
 
 #' imports the RAWdata register
-#' @param recursive will search directories recursively
+#' @param recursive Logical; should registered paths be searched recursively?
+#' @return `NULL`. The catalogue is updated as compatible register files are
+#'   imported.
 #' @export
 raw_import_register <- function(recursive=FALSE) {
   df <- raw_paths_read()
@@ -49,6 +54,9 @@ raw_import_register <- function(recursive=FALSE) {
 }
 
 #' @noRd
+#' @param df1 The first RAW file catalogue data frame.
+#' @param df2 The second RAW file catalogue data frame.
+#' @return A merged catalogue with duplicate `ID2` entries removed.
 raw_merge <- function(df1, df2) {
   df <- rbind(df1,df2)
   df <- df[!duplicated(df$ID2),]
@@ -67,6 +75,8 @@ raw_merge <- function(df1, df2) {
 }
 
 #' @noRd
+#' @param df A data frame to validate.
+#' @return Invisibly, `TRUE` when all required catalogue columns are present.
 check_rawdata_format <- function(df) {
   required_cols <- c("ID", "ID2", "file", "sha256", "found")
 

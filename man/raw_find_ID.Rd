@@ -6,6 +6,14 @@
 \usage{
 raw_find_ID(ID2)
 }
+\arguments{
+\item{ID2}{A base64-style RAW file identifier.}
+}
+\value{
+The matching filename, resolved against the registered RAW paths
+when possible, or \code{NA_character_} when the catalogue is empty. If the ID
+is not found, a warning is issued and \code{NA_character_} is returned.
+}
 \description{
 Retrieve a RAW filename by ID2
 }

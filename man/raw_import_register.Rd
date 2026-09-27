@@ -7,7 +7,11 @@
 raw_import_register(recursive = FALSE)
 }
 \arguments{
-\item{recursive}{will search directories recursively}
+\item{recursive}{Logical; should registered paths be searched recursively?}
+}
+\value{
+\code{NULL}. The catalogue is updated as compatible register files are
+imported.
 }
 \description{
 imports the RAWdata register

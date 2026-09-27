@@ -6,6 +6,16 @@
 \usage{
 raw_path_append(path, searchable = TRUE)
 }
+\arguments{
+\item{path}{A directory path to register.}
+
+\item{searchable}{Logical; should files beneath this path be searched by
+catalogue updates?}
+}
+\value{
+Invisibly, the complete data frame of registered RAW paths after
+duplicates and redundant child paths have been removed.
+}
 \description{
 Appends a RAW path
 }

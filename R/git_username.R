@@ -1,4 +1,7 @@
 #' Get the configured Git username or system's username
+#' @return The configured Git username, the system username when Git has no
+#'   configured username, or `NA_character_` when the configured value is
+#'   empty.
 #' @export
 git_username <- function() {
   result <- tryCatch(

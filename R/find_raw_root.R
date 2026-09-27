@@ -1,6 +1,9 @@
 #' Finds the directory with .rawdata2
 #'
 #' Either it finds the .rawdata2 directory or the nearest .git directory
+#' @param path A starting directory.
+#' @return The normalized path of the nearest directory containing `.rawdata2`
+#'   or `.git`, or `NA_character_` when neither is found.
 #' @export
 find_raw_root <- function(path = getwd()) {
   path <- normalizePath(path, mustWork = TRUE)
@@ -16,4 +19,3 @@ find_raw_root <- function(path = getwd()) {
     path <- parent
   }
 }
-

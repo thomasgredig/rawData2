@@ -1,4 +1,6 @@
 #' Data file with RAW paths
+#' @return The path to the `RAW_paths.csv` file. The `.rawdata2` directory is
+#'   created when necessary.
 #' @importFrom utils read.csv
 #' @export
 raw_paths_file <- function() {
@@ -19,6 +21,8 @@ raw_paths_file <- function() {
 
 
 #' Reads the RAW paths
+#' @return A data frame of registered RAW paths and their metadata. If the
+#'   catalogue does not exist, an empty data frame is returned.
 #' @export
 raw_paths_read <- function() {
   file <- raw_paths_file()
@@ -40,6 +44,11 @@ raw_paths_read <- function() {
 }
 
 #' Appends a RAW path
+#' @param path A directory path to register.
+#' @param searchable Logical; should files beneath this path be searched by
+#'   catalogue updates?
+#' @return Invisibly, the complete data frame of registered RAW paths after
+#'   duplicates and redundant child paths have been removed.
 #' @export
 raw_path_append <- function(path, searchable = TRUE) {
   if (length(path) != 1 || !is.character(path)) {
@@ -120,6 +129,10 @@ raw_path_append <- function(path, searchable = TRUE) {
 
 
 #' Remove duplicate and redundant RAW paths
+#' @param paths_df A data frame containing a `path` column and optional path
+#'   metadata columns.
+#' @return A data frame with duplicate paths and paths nested under another
+#'   registered path removed.
 #' @noRd
 raw_paths_reduce <- function(paths_df) {
   if (nrow(paths_df) == 0) {
@@ -164,6 +177,8 @@ raw_paths_reduce <- function(paths_df) {
 
 
 #' Removes path that do not exist; use with care
+#' @return Invisibly, the character vector of paths read before nonexistent
+#'   paths were removed from the catalogue.
 #' @export
 raw_path_trim <- function() {
   d <- raw_paths_read()

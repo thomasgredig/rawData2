@@ -1,4 +1,7 @@
 #' Information about the file
+#' @param ID A numeric catalogue ID or a base64-style `ID2` value.
+#' @return A list containing the numeric ID, base64-style ID, filename, found
+#'   status, and resolved full filename.
 #' @export
 raw_info <-function(ID) {
   idx <- raw_idxByID(ID)
@@ -15,6 +18,9 @@ raw_info <-function(ID) {
 
 
 #' Returns index in raw_files_read()
+#' @param ID A numeric catalogue ID or a base64-style `ID2` value.
+#' @return The matching row index, or `NA_character_` when no catalogue entry
+#'   matches.
 #' @noRd
 raw_idxByID <- function(ID) {
   if (length(ID) != 1L || is.na(ID)) {

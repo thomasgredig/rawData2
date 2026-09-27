@@ -1,4 +1,7 @@
 #' Read the RAW file catalogue
+#' @return A data frame containing the RAW file catalogue. If the catalogue
+#'   does not exist, an empty data frame with `file` and `sha256` columns is
+#'   returned.
 #' @importFrom utils read.csv
 #' @export
 raw_files_read <- function() {

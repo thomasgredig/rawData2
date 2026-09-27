@@ -6,6 +6,9 @@
 \usage{
 raw_init()
 }
+\value{
+The normalized path to the initialized \code{.rawdata2} directory.
+}
 \description{
 Initializes the .rawdata2 directory
 }

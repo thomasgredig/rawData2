@@ -6,6 +6,13 @@
 \usage{
 raw_file_record_by_id(ID)
 }
+\arguments{
+\item{ID}{A numeric RAW file identifier.}
+}
+\value{
+A one-row data frame containing the matching RAW file record, or
+\code{NULL} when no record matches.
+}
 \description{
 Retrieve file and SHA
 }

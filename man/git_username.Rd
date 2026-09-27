@@ -6,6 +6,11 @@
 \usage{
 git_username()
 }
+\value{
+The configured Git username, the system username when Git has no
+configured username, or \code{NA_character_} when the configured value is
+empty.
+}
 \description{
 Get the configured Git username or system's username
 }

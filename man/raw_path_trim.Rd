@@ -6,6 +6,10 @@
 \usage{
 raw_path_trim()
 }
+\value{
+Invisibly, the character vector of paths read before nonexistent
+paths were removed from the catalogue.
+}
 \description{
 Removes path that do not exist; use with care
 }

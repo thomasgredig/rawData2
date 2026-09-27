@@ -6,6 +6,13 @@
 \usage{
 raw_info(ID)
 }
+\arguments{
+\item{ID}{A numeric catalogue ID or a base64-style \code{ID2} value.}
+}
+\value{
+A list containing the numeric ID, base64-style ID, filename, found
+status, and resolved full filename.
+}
 \description{
 Information about the file
 }

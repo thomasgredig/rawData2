@@ -6,6 +6,11 @@
 \usage{
 raw_files_read()
 }
+\value{
+A data frame containing the RAW file catalogue. If the catalogue
+does not exist, an empty data frame with \code{file} and \code{sha256} columns is
+returned.
+}
 \description{
 Read the RAW file catalogue
 }

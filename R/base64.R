@@ -1,7 +1,10 @@
 #' Converts a number to a base64 string
-#' @param numbers list of decimal integers
+#' @param numbers A numeric vector of non-negative integer values. `NA`
+#'   values are represented by `"-"`.
 #' @description
 #' This makes a number shorter while using mostly letters and numbers with only two symbols
+#' @return A character vector containing one base64-style value for each
+#'   element of `numbers`.
 #'
 #' @noRd
 base64 <- function(numbers) {

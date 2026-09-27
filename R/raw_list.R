@@ -1,5 +1,7 @@
 #' Lists all available files
-#' @param nLEN maximum number of characters for file
+#' @param nLEN Maximum number of trailing characters to show for each filename.
+#' @return A data frame containing the ID, ID2, final directory component, and
+#'   shortened filename for files currently marked as found.
 #' @importFrom dplyr select mutate
 #' @export
 raw_list <- function(nLEN=40) {

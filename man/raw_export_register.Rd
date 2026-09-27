@@ -6,6 +6,13 @@
 \usage{
 raw_export_register(target_path)
 }
+\arguments{
+\item{target_path}{A directory in which to write the exported register.}
+}
+\value{
+The path to the exported register, or \code{NA_character_} when
+\code{target_path} does not exist.
+}
 \description{
 exports the RAWdata register to the target_path
 }

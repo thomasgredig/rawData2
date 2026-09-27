@@ -6,6 +6,10 @@
 \usage{
 raw_paths_read()
 }
+\value{
+A data frame of registered RAW paths and their metadata. If the
+catalogue does not exist, an empty data frame is returned.
+}
 \description{
 Reads the RAW paths
 }

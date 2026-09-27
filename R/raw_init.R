@@ -1,5 +1,6 @@
 #' Initializes the .rawdata2 directory
 #'
+#' @return The normalized path to the initialized `.rawdata2` directory.
 #' @export
 raw_init <- function() {
   root_dir <- find_raw_root()
@@ -28,4 +29,3 @@ raw_init <- function() {
 
   normalizePath(rawdata_dir, mustWork = TRUE)
 }
-

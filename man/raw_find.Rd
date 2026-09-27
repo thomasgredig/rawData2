@@ -6,6 +6,16 @@
 \usage{
 raw_find(filename_partial, type = "SHA256")
 }
+\arguments{
+\item{filename_partial}{A character vector of complete or partial filenames
+to match.}
+
+\item{type}{Reserved for compatibility; currently ignored.}
+}
+\value{
+An integer vector of matching numeric RAW IDs. A zero-length vector
+is returned when no filenames match.
+}
 \description{
 Find IDs from partial filenames
 }

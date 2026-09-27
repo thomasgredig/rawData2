@@ -7,7 +7,11 @@
 raw_update(paths = c())
 }
 \arguments{
-\item{paths}{list of paths with data files}
+\item{paths}{A character vector of paths to register before updating the
+catalogue.}
+}
+\value{
+Invisibly, the updated RAW file catalogue as a data frame.
 }
 \description{
 Update the RAW file catalogue with SHA-256 checksums

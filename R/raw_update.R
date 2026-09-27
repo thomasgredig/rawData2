@@ -1,5 +1,7 @@
 #' Update the RAW file catalogue with SHA-256 checksums
-#' @param paths list of paths with data files
+#' @param paths A character vector of paths to register before updating the
+#'   catalogue.
+#' @return Invisibly, the updated RAW file catalogue as a data frame.
 #' @importFrom digest digest
 #' @importFrom utils write.csv
 #' @export
@@ -162,6 +164,8 @@ raw_update <- function(paths = c()) {
 }
 
 #' @noRd
+#' @param df_files A data frame containing RAW file catalogue records.
+#' @return The path to the saved `RAW_files.csv` catalogue.
 rawFilesSave <- function(df_files) {
   raw_files_file <- file.path(
     dirname(raw_paths_file()),

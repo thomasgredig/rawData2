@@ -6,6 +6,13 @@
 \usage{
 find_raw_root(path = getwd())
 }
+\arguments{
+\item{path}{A starting directory.}
+}
+\value{
+The normalized path of the nearest directory containing \code{.rawdata2}
+or \code{.git}, or \code{NA_character_} when neither is found.
+}
 \description{
 Either it finds the .rawdata2 directory or the nearest .git directory
 }
