@@ -21,6 +21,16 @@ test_that("find root directory", {
   expect_warning({f <- raw_file_by_id(8778)})
 
   expect_true(is.na(f))
+  request_log <- file.path(test_dir, ".rawdata2", "RAW_file_by_id.txt")
+  expect_true(file.exists(request_log))
+  log_lines <- readLines(request_log)
+  expect_length(log_lines, 2L)
+  expect_match(
+    log_lines[2],
+    paste0("^8778\t\t[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:")
+  )
+  request_date <- substr(strsplit(log_lines[2], "\t", fixed = TRUE)[[1]][3], 1L, 10L)
+  expect_equal(raw_id2_by_date(request_date), list())
   expect_warning({f <- raw_file_record_by_id(88)})
   expect_true(is.null(f))
 

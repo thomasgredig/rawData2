@@ -79,6 +79,13 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
   files <- character()
 
   if (length(search_paths) > 0) {
+    extensions <- raw_extensions_read()
+    extension_pattern <- if (length(extensions) > 0L) {
+      paste0("\\.(", paste(extensions, collapse = "|"), "|[0-9]+)$")
+    } else {
+      "^$"
+    }
+
     files <- unlist(
       lapply(search_paths, function(path) {
         if (!dir.exists(path)) {
@@ -88,7 +95,7 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
 
         list.files(
           path = path,
-          pattern = "\\.(tiff|jpg|jpeg|png|ibw|ras|rasx|txt|csv|bin|xlsx|docx|asc|nid|[0-9]+)$",
+          pattern = extension_pattern,
           recursive = TRUE,
           full.names = TRUE,
           include.dirs = FALSE,

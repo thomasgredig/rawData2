@@ -1,3 +1,10 @@
+# rawdata2 0.2.2
+
+* configure additional `raw_update()` file extensions in
+  `.rawdata2/config.txt` with `raw_extensions_append()`
+* record `raw_file_by_id()` requests in `.rawdata2/RAW_file_by_id.txt`
+* add `raw_id2_by_date()` to retrieve unique requested ID2 values by date
+
 # rawdata2 0.2.1
 
 * load files with certain file extensions only

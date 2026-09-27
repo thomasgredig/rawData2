@@ -38,6 +38,33 @@ test_that("raw_update finds random RAW files", {
     unlink(test_dir, recursive = TRUE, force = TRUE)
   })
 
+  test_that("raw_update uses configured file extensions", {
+    old_wd <- getwd()
+    test_dir <- tempfile("raw-extensions-")
+    dir.create(test_dir, recursive = TRUE)
+    on.exit({
+      setwd(old_wd)
+      unlink(test_dir, recursive = TRUE, force = TRUE)
+    })
+    setwd(test_dir)
+
+    raw_init()
+    source_dir <- file.path(test_dir, "source")
+    dir.create(source_dir)
+    writeLines("default", file.path(source_dir, "default.txt"))
+    writeLines("custom", file.path(source_dir, "custom.foo"))
+    raw_path_append(source_dir)
+
+    initial <- raw_update()
+    expect_true("default.txt" %in% initial$file)
+    expect_false("custom.foo" %in% initial$file)
+    expect_true(file.exists(file.path(test_dir, ".rawdata2", "config.txt")))
+
+    raw_extensions_append(".foo")
+    updated <- raw_update()
+    expect_true("custom.foo" %in% updated$file)
+  })
+
   test_that("raw_update fastScan reuses same-size file checksums", {
     old_wd <- getwd()
     test_dir <- tempfile("raw-fast-scan-")

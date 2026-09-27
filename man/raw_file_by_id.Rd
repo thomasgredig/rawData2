@@ -16,3 +16,7 @@ the file cannot be found.
 \description{
 Retrieve a RAW filename by ID
 }
+\details{
+Each request is appended to \code{RAW_file_by_id.txt} in the
+\code{.rawdata2} directory with its \code{ID}, \code{ID2}, timestamp, and system user.
+}
