@@ -1,6 +1,5 @@
 # rawdata2 0.2.0
 
-
 * add import and export of RAWdata register
 * add `raw_info()` for information about an ID
 * add `raw_find()` to search for IDs from a list of filenames (partial)

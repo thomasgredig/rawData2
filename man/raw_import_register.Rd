@@ -6,6 +6,9 @@
 \usage{
 raw_import_register(recursive = FALSE)
 }
+\arguments{
+\item{recursive}{will search directories recursively}
+}
 \description{
 imports the RAWdata register
 }

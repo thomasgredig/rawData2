@@ -1,4 +1,5 @@
 #' Converts a number to a base64 string
+#' @param numbers list of decimal integers
 #' @description
 #' This makes a number shorter while using mostly letters and numbers with only two symbols
 #'
@@ -22,8 +23,6 @@ base64 <- function(numbers) {
         number != floor(number)) {
       stop("number must be one non-negative integer:", number)
     }
-
-
 
     if (number == 0) {
       return("0")

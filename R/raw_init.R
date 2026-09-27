@@ -24,6 +24,8 @@ raw_init <- function() {
     message("Found ", nrow(d_files), " files")
   }
 
+  raw_import_register()
+
   normalizePath(rawdata_dir, mustWork = TRUE)
 }
 

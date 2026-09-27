@@ -72,9 +72,12 @@ raw_update <- function(paths = c()) {
 
         list.files(
           path = path,
+          pattern = "\\.(tiff|jpg|jpeg|png|ibw|ras|rasx|txt|asc|nid|[0-9]+)$",
           recursive = TRUE,
           full.names = TRUE,
-          include.dirs = FALSE
+          include.dirs = FALSE,
+          all.files = TRUE,
+          ignore.case = TRUE
         )
       }),
       use.names = FALSE

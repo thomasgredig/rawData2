@@ -17,21 +17,31 @@ raw_export_register <- function(target_path) {
 }
 
 #' imports the RAWdata register
+#' @param recursive will search directories recursively
 #' @export
 raw_import_register <- function(recursive=FALSE) {
   df <- raw_paths_read()
-  for(path in df$path) {
+  path_list = c(".", df$path)
+  for(path in path_list) {
     if (dir.exists(path)) {
+      # local directory is only searched, but not recursively
+      recur <- recursive && !identical(path, ".")
       files <- dir(path, pattern=".rawdata2_",
-                   full.names = TRUE, all.files = TRUE,
-                   recursive=recursive)
+                   full.names = TRUE,
+                   all.files = TRUE, # needed to find dot files
+                   recursive=recur)
       if (length(files)>0) {
         for(file in files) {
           message("Importing: ", basename(files))
           old_files <- raw_files_read()
           new_files <- read.csv(file)
-          all_files <- raw_merge(old_files, new_files)
-          rawFilesSave(all_files)
+          if (check_rawdata_format(new_files)) {
+            all_files <- raw_merge(old_files, new_files)
+            rawFilesSave(all_files)
+          } else {
+            message("Incompatible file: ", file)
+          }
+
         }
       }
     }
@@ -40,8 +50,6 @@ raw_import_register <- function(recursive=FALSE) {
 
 #' @noRd
 raw_merge <- function(df1, df2) {
-  df1 = d1
-  df2 = d2
   df <- rbind(df1,df2)
   df <- df[!duplicated(df$ID2),]
 
@@ -56,4 +64,24 @@ raw_merge <- function(df1, df2) {
   }
 
   df
+}
+
+#' @noRd
+check_rawdata_format <- function(df) {
+  required_cols <- c("ID", "ID2", "file", "sha256", "found")
+
+  if (!is.data.frame(df)) {
+    stop("'df' must be a data frame.")
+  }
+
+  missing_cols <- setdiff(required_cols, names(df))
+
+  if (length(missing_cols) > 0L) {
+    stop(
+      "Missing required column(s): ",
+      paste(missing_cols, collapse = ", ")
+    )
+  }
+
+  invisible(TRUE)
 }
