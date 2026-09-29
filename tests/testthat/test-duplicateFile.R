@@ -40,7 +40,8 @@ test_that("duplicate and missing files", {
   # Create a minimal DataLad-like dataset marker.
   #dir.create(".rawdata2")
   p <- raw_init()
-  raw_source_dir <- create_N_random_files(test_dir, 5)
+  N = 5L
+  raw_source_dir <- create_N_random_files(test_dir, N)
 
   # Register the RAW directory for recursive searching.
   raw_path_append(
@@ -62,4 +63,17 @@ test_that("duplicate and missing files", {
   filename <- raw_file_by_id(ID2)
   expect_equal(length(filename),1L)
   expect_true(file.exists(filename[1]))
+
+  # check raw_list()
+  raw_id_by_file("RaNdOm", ignore.case = TRUE) -> m
+  raw_list(m) -> f
+  expect_equal(nrow(f), N)
+
+  raw_find("random") -> m
+  raw_list(m) -> f
+  expect_equal(nrow(f), N)
+
+  raw_find(basename(filename[1])) -> m
+  raw_list(m) -> f
+  expect_equal(nrow(f), 1L)
 })

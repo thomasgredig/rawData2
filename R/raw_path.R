@@ -21,8 +21,9 @@ raw_paths_file <- function() {
 
 
 #' Reads the RAW paths
-#' @return A data frame of registered RAW paths and their metadata. If the
-#'   catalogue does not exist, an empty data frame is returned.
+#' @return A data frame of registered RAW paths and their metadata, including
+#'   the logical `remote` column. If the catalogue does not exist, an empty
+#'   data frame is returned.
 #' @export
 raw_paths_read <- function() {
   file <- raw_paths_file()
@@ -31,6 +32,7 @@ raw_paths_read <- function() {
     return(data.frame(
       path = character(),
       searchable = logical(),
+      remote = logical(),
       stringsAsFactors = FALSE
     ))
   }
@@ -40,6 +42,11 @@ raw_paths_read <- function() {
     stringsAsFactors = FALSE
   )
 
+  # Treat paths from older catalogues as remote by default.
+  if (!"remote" %in% names(paths_df)) {
+    paths_df$remote <- TRUE
+  }
+
   raw_paths_reduce(paths_df)
 }
 
@@ -47,16 +54,22 @@ raw_paths_read <- function() {
 #' @param path A directory path to register.
 #' @param searchable Logical; should files beneath this path be searched by
 #'   catalogue updates?
+#' @param remote Logical; whether the registered path is remote. Defaults to
+#'   `TRUE`.
 #' @return Invisibly, the complete data frame of registered RAW paths after
 #'   duplicates and redundant child paths have been removed.
 #' @export
-raw_path_append <- function(path, searchable = TRUE) {
+raw_path_append <- function(path, searchable = TRUE, remote = TRUE) {
   if (length(path) != 1 || !is.character(path)) {
     stop("'path' must be a single character string.")
   }
 
   if (length(searchable) != 1 || !is.logical(searchable)) {
     stop("'searchable' must be a single TRUE or FALSE value.")
+  }
+
+  if (length(remote) != 1 || !is.logical(remote) || is.na(remote)) {
+    stop("'remote' must be a single TRUE or FALSE value.")
   }
 
   file <- raw_paths_file()
@@ -68,6 +81,7 @@ raw_path_append <- function(path, searchable = TRUE) {
       ID = integer(),
       path = character(),
       searchable = logical(),
+      remote = logical(),
       user = character(),
       date = character(),
       stringsAsFactors = FALSE
@@ -85,8 +99,12 @@ raw_path_append <- function(path, searchable = TRUE) {
       existing_paths$date <- NA_character_
     }
 
+    if (!"remote" %in% names(existing_paths)) {
+      existing_paths$remote <- TRUE
+    }
+
     existing_paths <- existing_paths[, c(
-      "ID", "path", "searchable", "user", "date"
+      "ID", "path", "searchable", "remote", "user", "date"
     )]
   }
 
@@ -101,6 +119,7 @@ raw_path_append <- function(path, searchable = TRUE) {
     ID = new_ID,
     path = path,
     searchable = searchable,
+    remote = remote,
     user = git_username(),
     date = as.character(Sys.Date()),
     stringsAsFactors = FALSE
@@ -113,7 +132,7 @@ raw_path_append <- function(path, searchable = TRUE) {
 
   # Keep the requested column order.
   all_paths <- all_paths[, c(
-    "ID", "path", "searchable", "user", "date"
+    "ID", "path", "searchable", "remote", "user", "date"
   )]
 
   write.csv(

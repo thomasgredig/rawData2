@@ -4,13 +4,16 @@
 \alias{raw_path_append}
 \title{Appends a RAW path}
 \usage{
-raw_path_append(path, searchable = TRUE)
+raw_path_append(path, searchable = TRUE, remote = TRUE)
 }
 \arguments{
 \item{path}{A directory path to register.}
 
 \item{searchable}{Logical; should files beneath this path be searched by
 catalogue updates?}
+
+\item{remote}{Logical; whether the registered path is remote. Defaults to
+\code{TRUE}.}
 }
 \value{
 Invisibly, the complete data frame of registered RAW paths after

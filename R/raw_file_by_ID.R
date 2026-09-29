@@ -48,7 +48,8 @@ raw_file_by_id <- function(ID) {
   found <- file.exists(candidate_paths)
 
   if (!any(found)) {
-    warning("File not found in any registered RAW path: ", filename)
+    warning("File not found in any registered RAW path: ", filename,"\n",
+            "Consider adding paths with raw_path_append() and/or run raw_update() again.")
     return(NA_character_)
   }
 

@@ -1,3 +1,10 @@
+# rawdata2 0.3.0
+
+* add SQLite functionality with `raw_initDB()`
+* add `remote` path metadata to `raw_path_append()` and `raw_paths_read()`;
+  paths are remote by default and can be marked local with `remote = FALSE`
+* TODO: fix issue with path stripping for secondary paths
+
 # rawdata2 0.2.2
 
 * configure additional `raw_update()` file extensions in

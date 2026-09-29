@@ -4,7 +4,7 @@
 \alias{raw_list}
 \title{Lists all available files}
 \usage{
-raw_list(nLEN = 40, found = TRUE)
+raw_list(IDlist = NULL, nLEN = 40, found = TRUE)
 }
 \arguments{
 \item{nLEN}{Maximum number of trailing characters to show for each filename.}

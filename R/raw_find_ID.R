@@ -72,23 +72,28 @@ raw_id_by_file <- function(filename,
     return(integer())
   }
 
+  search_files <- raw_files$file
+  if (ignore.case) {
+    filename <- tolower(filename)
+    search_files <- tolower(search_files)
+  }
+
   matches <- grepl(
     filename,
-    raw_files$file,
-    fixed = TRUE,
-    ignore.case = ignore.case
+    search_files,
+    fixed = TRUE
   )
 
   if (found_only && "found" %in% names(raw_files)) {
     matches <- matches & raw_files$found
   }
 
-  IDs <- raw_files$ID[matches]
+  IDs <- raw_files$ID2[matches]
 
   if (length(IDs) == 0) {
     warning("No RAW file matched: ", filename)
-    return(integer())
+    return(character())
   }
 
-  as.integer(IDs)
+  IDs
 }

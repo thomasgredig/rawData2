@@ -4,7 +4,7 @@
 #' @return A list of unique `ID2` values requested on `date`. An empty list is
 #'   returned when no request log exists or no requests match.
 #' @export
-raw_id2_by_date <- function(date) {
+raw_id2_by_date <- function(date = Sys.Date()) {
   if (inherits(date, "Date")) {
     if (length(date) != 1L || is.na(date)) {
       stop("'date' must be a single non-missing date.")
