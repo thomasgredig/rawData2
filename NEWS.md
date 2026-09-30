@@ -4,6 +4,8 @@
 * add `remote` path metadata to `raw_path_append()` and `raw_paths_read()`;
   paths are remote by default and can be marked local with `remote = FALSE`
 * TODO: fix issue with path stripping for secondary paths
+* allow `raw_find()` to match filenames containing two literal search strings
+
 
 # rawdata2 0.2.2
 

@@ -4,11 +4,15 @@
 \alias{raw_find}
 \title{Find IDs from partial filenames}
 \usage{
-raw_find(filename_partial, type = "SHA256")
+raw_find(filename_partial, filename_partial2 = NULL, type = "SHA256")
 }
 \arguments{
 \item{filename_partial}{A character vector of complete or partial filenames
 to match.}
+
+\item{filename_partial2}{An optional single complete or partial filename
+string. When supplied, only files matching both search strings are
+returned.}
 
 \item{type}{Reserved for compatibility; currently ignored.}
 }

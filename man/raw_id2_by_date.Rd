@@ -4,7 +4,7 @@
 \alias{raw_id2_by_date}
 \title{Retrieve unique RAW ID2 values requested on a date}
 \usage{
-raw_id2_by_date(date)
+raw_id2_by_date(date = Sys.Date())
 }
 \arguments{
 \item{date}{A single \code{Date} value or a date string in \code{YYYY-MM-DD} format.}
