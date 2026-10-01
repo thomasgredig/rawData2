@@ -1,3 +1,7 @@
+# rawdata2 0.3.1
+
+* `raw_getID()` generates the ID2 value for any file
+
 # rawdata2 0.3.0
 
 * add SQLite functionality with `raw_initDB()`
@@ -11,7 +15,7 @@
 
 * configure additional `raw_update()` file extensions in
   `.rawdata2/config.txt` with `raw_extensions_append()`
-* record `raw_file_by_id()` requests in `.rawdata2/RAW_file_by_id.txt`
+* record `raw_file_by_id()` requests in `.rawdata2/RAW_log.txt`
 * add `raw_id2_by_date()` to retrieve unique requested ID2 values by date
 
 # rawdata2 0.2.1

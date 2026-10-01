@@ -12,14 +12,13 @@
 #' needs to be recreated.
 #'
 #' @param rawBase object, use create_rawBase()
-#' @param quiet suppress messages
 #'
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
 #' @importFrom cli cli_inform
 #'
 #' @export
-raw_initDB <- function(quiet=FALSE) {
+raw_initDB <- function() {
   dbName = raw_get_SQL_database()
 
   if (file.exists(dbName)) {
@@ -29,9 +28,8 @@ raw_initDB <- function(quiet=FALSE) {
     return(raw_get_SQL_database())
   }
 
-  if (!quiet) cat("Creating new database:", dbName, "\n")
+  message("Creating new database:", dbName, "\n")
 
-  cat("DB name:",dbName)
   mydb <- dbConnect(RSQLite::SQLite(), dbName)
   .writeSQLdatabaseInit(mydb)
   .updateSQLhistory(mydb, git_username(), "init")

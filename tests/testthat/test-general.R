@@ -23,7 +23,7 @@ test_that("find root directory", {
   expect_warning({f <- raw_file_by_id(8778)})
 
   expect_true(is.na(f))
-  request_log <- file.path(test_dir, ".rawdata2", "RAW_file_by_id.txt")
+  request_log <- file.path(test_dir, ".rawdata2", "RAW_log.txt")
   expect_true(file.exists(request_log))
   log_lines <- readLines(request_log)
   expect_length(log_lines, 2L)

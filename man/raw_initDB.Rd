@@ -4,11 +4,9 @@
 \alias{raw_initDB}
 \title{Initialize SQL database}
 \usage{
-raw_initDB(quiet = FALSE)
+raw_initDB()
 }
 \arguments{
-\item{quiet}{suppress messages}
-
 \item{rawBase}{object, use create_rawBase()}
 }
 \description{

@@ -2,7 +2,7 @@
 #' @param ID A numeric catalogue ID or a base64-style `ID2` value.
 #' @return The normalized path to the matching file, or `NA_character_` when
 #'   the file cannot be found.
-#' @details Each request is appended to `RAW_file_by_id.txt` in the
+#' @details Each request is appended to `RAW_log.txt` in the
 #'   `.rawdata2` directory with its `ID`, `ID2`, timestamp, and system user.
 #' @export
 raw_file_by_id <- function(ID) {
@@ -82,7 +82,7 @@ raw_file_by_id_append_log <- function(ID, match_index, raw_files) {
     requested_id2 <- as.character(ID)
   }
 
-  log_file <- file.path(dirname(raw_paths_file()), "RAW_file_by_id.txt")
+  log_file <- file.path(dirname(raw_paths_file()), "RAW_log.txt")
   if (!file.exists(log_file)) {
     cat("ID\tID2\ttimestamp\tuser\n", file = log_file)
   }

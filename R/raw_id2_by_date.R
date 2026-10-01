@@ -22,7 +22,7 @@ raw_id2_by_date <- function(date = Sys.Date()) {
     stop("'date' must be a single Date or 'YYYY-MM-DD' value.")
   }
 
-  log_file <- file.path(dirname(raw_paths_file()), "RAW_file_by_id.txt")
+  log_file <- file.path(dirname(raw_paths_file()), "RAW_log.txt")
   if (!file.exists(log_file)) {
     return(list())
   }
@@ -37,7 +37,7 @@ raw_id2_by_date <- function(date = Sys.Date()) {
   required_columns <- c("ID2", "timestamp")
   if (!all(required_columns %in% names(requests))) {
     stop(
-      "RAW_file_by_id.txt is missing required column(s): ",
+      "RAW_log.txt is missing required column(s): ",
       paste(setdiff(required_columns, names(requests)), collapse = ", ")
     )
   }
