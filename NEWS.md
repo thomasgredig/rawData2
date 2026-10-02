@@ -1,6 +1,6 @@
 # rawdata2 0.3.1
 
-* `raw_getID()` generates the ID2 value for any file
+* `raw_getID()` generates the ID2 value for one or multiple files.
 
 # rawdata2 0.3.0
 
