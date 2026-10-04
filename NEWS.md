@@ -1,3 +1,7 @@
+# rawdata2 0.3.3
+
+* for duplicate files keep the one with the lowest ID (for example if legacy imported without sha256 through `raw_init()`)
+
 # rawdata2 0.3.2
 
 * remove `raw_find_ID()`, as it is identical to `raw_file_by_id()`

@@ -1,7 +1,7 @@
 write_legacy_rawdata <- function(folder) {
   txt <- '"ID","size","missing","filename"
-7,21,FALSE,"legacy7.csv"
-8,21,FALSE,"legacy8.csv"'
+7,101,FALSE,"legacy7.csv"
+8,108,FALSE,"legacy8.csv"'
 
   df <- read.csv(text = txt)
 
@@ -45,16 +45,25 @@ test_that("test registers", {
   raw_files_read()  -> df
   expect_equal(nrow(df),2)
 
-  # add 2 test files
-  folder_raw = file.path(test_dir, "raw-data-folder")
+  expect_true(all(is.na(df$sha256)))
+
+  # add 2 test files + 1 is the legacy8.csv file
+  folder_raw = file.path(test_dir, "RAW")
   dir.create(folder_raw, recursive = TRUE)
   raw_path_append(folder_raw)
   add_test_files(folder_raw, 2L)
+  file_legacy = file.path(folder_raw,"legacy8.csv")
+  write.csv(df,  file_legacy, row.names = FALSE)
 
   expect_warning(raw_init()) # ID collision(s).
   raw_update()
   raw_files_read()  -> df
-  expect_equal(nrow(df),4)
+
+  expect_equal(nrow(df), 5L)
+  raw_update() # should remove duplicate legacy8.csv
+  raw_files_read()  -> df
+
+  expect_equal(nrow(df), 4L)
 
   ID2 <- df[which(df$found==TRUE)[1],'ID2']
   sha256 <- df[which(df$found==TRUE)[1],'sha256']

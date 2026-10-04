@@ -36,6 +36,8 @@ raw_id_by_file <- function(filename,
   }
 
   IDs <- raw_files$ID2[matches]
+  na_ids <- is.na(IDs)
+  IDs[na_ids] <-  paste0("00000",raw_files$ID[matches][na_ids])
 
   if (length(IDs) == 0) {
     warning("No RAW file matched: ", filename)

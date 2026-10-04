@@ -8,6 +8,7 @@
 #'   `filesize` column contains the size of each found file in bytes and is
 #'   `NA` for files that are not currently found.
 #' @importFrom digest digest
+#' @importFrom dplyr distinct select mutate filter row_number arrange group_by ungroup if_else left_join
 #' @importFrom utils write.csv
 #' @export
 raw_update <- function(paths = c(), fastScan = TRUE) {
@@ -73,6 +74,37 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
     old$found <- FALSE
   }
 
+
+  # merge duplicate files that have the same name + size, but no sha256
+  lookup <- old |>
+    filter(!is.na(sha256)) |>
+    mutate(file = basename(file)) |>
+    select(file, filesize,
+           sha256_new = sha256,
+           ID2_new = ID2) |>
+    distinct(file, filesize, .keep_all = TRUE)
+
+  if (nrow(lookup)>0) {
+    old <- old |>
+      mutate(file = basename(file)) |>
+      left_join(lookup, by = c("file", "filesize")) |>
+      mutate(
+        needs_update = !is.na(found) & !found & is.na(sha256),
+        sha256 = if_else(needs_update, sha256_new, sha256),
+        ID2    = if_else(needs_update, ID2_new, ID2)
+      ) |>
+      select(-sha256_new, -ID2_new, -needs_update)
+
+    old <- old |>
+      arrange(ID) |>
+      group_by(sha256) |>
+      filter(is.na(sha256) | row_number() == 1) |>
+      ungroup()
+  }
+
+
+
+
   # Search only paths marked as searchable.
   search_paths <- paths$path[paths$searchable %in% TRUE]
 
@@ -128,6 +160,7 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
         old$sha256[previous_index[i]]
       } else {
         setTxtProgressBar(pb, i)
+
         digest(
           files[[i]],
           algo = "sha256",

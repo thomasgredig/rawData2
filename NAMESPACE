@@ -36,9 +36,16 @@ importFrom(RSQLite,SQLite)
 importFrom(cli,cli_inform)
 importFrom(digest,digest)
 importFrom(dplyr,
+  arrange,
+  distinct,
   filter,
+  group_by,
+  if_else,
+  left_join,
   mutate,
-  select
+  row_number,
+  select,
+  ungroup
 )
 importFrom(utils,
   read.csv,
