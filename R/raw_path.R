@@ -7,7 +7,7 @@ raw_paths_file <- function() {
   root_dir <- find_raw_root()
 
   if (is.na(root_dir)) {
-    stop("No DataLad dataset root found.")
+    stop("No root directory for .rawdata2 is found; create a GIT or make a folder `.rawdata2` in the root directory.")
   }
 
   rawdata_dir <- file.path(root_dir, ".rawdata2")

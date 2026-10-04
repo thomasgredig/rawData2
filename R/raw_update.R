@@ -121,10 +121,13 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
       !is.na(old$filesize[previous_index]) &
       old$filesize[previous_index] == file_sizes
 
+    pb <- txtProgressBar(min = 0, max = length(files), style = 3)
+
     checksums <- vapply(seq_along(files), function(i) {
-      if (can_reuse[i]) {
+      if (can_reuse[i] & !is.na(old$sha256[previous_index[i]])) {
         old$sha256[previous_index[i]]
       } else {
+        setTxtProgressBar(pb, i)
         digest(
           files[[i]],
           algo = "sha256",
@@ -132,6 +135,8 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
         )
       }
     }, character(1))
+
+    close(pb)
 
     current <- data.frame(
       file = relative_files,
@@ -187,6 +192,16 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
       old <- rbind(old, new_rows)
     }
   }
+
+  # merge IDs of files that have the same file name, file size, and ID
+  na_rows <- is.na(old$sha256)
+
+  keep <- rep(TRUE, nrow(old))
+  keep[na_rows] <- !duplicated(
+    old[na_rows, c("ID", "filesize", "file")]
+  )
+
+  old <- old[keep, ]
 
   raw_files_file <- rawFilesSave(old)
 

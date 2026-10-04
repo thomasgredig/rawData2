@@ -11,6 +11,8 @@ raw_list <- function(IDlist = NULL, nLEN = 40, found = TRUE) {
     stop("'found' must be a single TRUE or FALSE value.")
   }
 
+  IDlist <- na.omit(IDlist)
+
   d <- raw_files_read()
   if (!is.null(IDlist)) {
     if (is.numeric(IDlist)) {

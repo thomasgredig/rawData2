@@ -1,3 +1,10 @@
+# rawdata2 0.3.2
+
+* remove `raw_find_ID()`, as it is identical to `raw_file_by_id()`
+* remove duplicate IDs, if SHA256 is NA and filesize and filename and ID are the same
+* add `raw_export_legacy_rawData()` as part of `raw_init()` to import legacy data
+* add progress bar for `raw_update()`
+
 # rawdata2 0.3.1
 
 * `raw_getID()` generates the ID2 value for one or multiple files.

@@ -25,6 +25,8 @@ raw_init <- function() {
     message("Found ", nrow(d_files), " files")
   }
 
+  # create a register from rawData as needed
+  raw_export_legacy_rawData(root_dir)
   raw_import_register()
 
   normalizePath(rawdata_dir, mustWork = TRUE)

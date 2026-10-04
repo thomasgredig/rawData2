@@ -7,7 +7,7 @@
 raw_info(ID)
 }
 \arguments{
-\item{ID}{A numeric catalogue ID or a base64-style \code{ID2} value.}
+\item{ID}{A numeric catalogue ID or a base64-style \code{ID2} value or integer \code{ID}.}
 }
 \value{
 A list containing the numeric ID, base64-style ID, filename, found

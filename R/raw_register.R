@@ -12,7 +12,7 @@ raw_export_register <- function(target_path) {
   target_file = paste0(".rawdata2_" ,username ,".csv")
 
   df <- raw_files_read()
-  fname = normalizePath( file.path(target_path, target_file) )
+  fname =  file.path(target_path, target_file)
   write.csv(df, row.names = FALSE,
             file = fname)
 
@@ -43,10 +43,12 @@ raw_import_register <- function(recursive=FALSE) {
           if (check_rawdata_format(new_files)) {
             all_files <- raw_merge(old_files, new_files)
             rawFilesSave(all_files)
+            # rename file, so it is not re-imported
+            file_newname <- gsub(".rawdata2_","rawdata2_imported_", file)
+            file.rename(file, file_newname)
           } else {
             message("Incompatible file: ", file)
           }
-
         }
       }
     }
@@ -76,12 +78,13 @@ raw_merge <- function(df1, df2) {
   df2 <- df2[, columns, drop = FALSE]
 
   df <- rbind(df1,df2)
-  df <- df[!duplicated(df$ID2),]
+  # df <- df[!duplicated(df$ID2),]
 
+  # MERGE may have not computed all ID2 yet
   # this should never occur, but collisions are possible
-  if (length(which(duplicated(df$ID2)==TRUE))>0) {
-    stop("ID2 has collision, cannot merge RAWdata registers.")
-  }
+  # if (length(which(duplicated(df$ID2)==TRUE))>0) {
+  #   stop("ID2 has collision, cannot merge RAWdata registers.")
+  # }
 
   # however, the ID can collide more often
   if (length(which(duplicated(df$ID)==TRUE))>0) {
