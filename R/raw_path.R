@@ -1,5 +1,5 @@
 #' Data file with RAW paths
-#' @return The path to the `RAW_paths.csv` file. The `.rawdata2` directory is
+#' @return The path to the FILE_PATHS file. The `.rawdata2` directory is
 #'   created when necessary.
 #' @importFrom utils read.csv
 #' @export
@@ -16,7 +16,7 @@ raw_paths_file <- function() {
     dir.create(rawdata_dir, recursive = TRUE)
   }
 
-  file.path(rawdata_dir, "RAW_paths.csv")
+  file.path(rawdata_dir, FILE_PATHS)
 }
 
 

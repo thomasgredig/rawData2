@@ -7,7 +7,7 @@
 raw_paths_file()
 }
 \value{
-The path to the \code{RAW_paths.csv} file. The \code{.rawdata2} directory is
+The path to the FILE_PATHS file. The \code{.rawdata2} directory is
 created when necessary.
 }
 \description{

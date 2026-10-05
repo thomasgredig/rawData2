@@ -170,6 +170,6 @@ test_that("raw_update finds random RAW files", {
 
   # Verify that the catalogue was saved.
   expect_true(
-    file.exists(file.path(test_dir, ".rawdata2", "RAW_files.csv"))
+    file.exists(file.path(test_dir, ".rawdata2", FILE_FILES))
   )
 })

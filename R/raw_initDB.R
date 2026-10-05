@@ -25,7 +25,7 @@ raw_initDB <- function() {
     # database already exists
     # does not need to be initialized
     warning("SQL database already exists.")
-    return(raw_get_SQL_database())
+    return(dbName)
   }
 
   message("Creating new database:", dbName, "\n")
@@ -38,15 +38,9 @@ raw_initDB <- function() {
   return(dbName)
 }
 
-# check if database already exists, must have
-# @noRd
-sql_database_exists <- function() {
-  dbName = raw_get_SQL_database()
-  if(is.null(dbName)) return(FALSE)
-  file.exists(dbName)
-}
 
-
+#' returns the name of the SQL database
+#' @noRd
 raw_get_SQL_database <- function() {
   root_dir <- find_raw_root()
   if (is.na(root_dir)) {
@@ -59,7 +53,7 @@ raw_get_SQL_database <- function() {
     dir.create(rawdata_dir, recursive = TRUE)
   }
 
-  file.path(rawdata_dir, "RAW.sqlite")
+  file.path(rawdata_dir, FILE_DB)
 }
 
 
@@ -69,7 +63,7 @@ raw_get_SQL_database <- function() {
 #' @param mydb database connection from DBI::dbConnect
 #' @param verbose logical to output extra information
 #' @importFrom DBI dbCreateTable
-#' @export
+#' @noRd
 .writeSQLdatabaseInit <- function(mydb, verbose=FALSE) {
   tbl <- .getSQLtableNames()
   dfAFM_empty = data.frame(ID = integer(),
@@ -102,7 +96,7 @@ raw_get_SQL_database <- function() {
 #' reads the sqlHistory table
 #' @param mydb database connection from DBI::dbConnect
 #' @importFrom DBI dbReadTable
-#' @export
+#' @noRd
 .readSQLhistory<- function(mydb) {
   tbl <- .getSQLtableNames()
   DBI::dbReadTable(mydb, tbl$tblNameHistory)
@@ -112,7 +106,7 @@ raw_get_SQL_database <- function() {
 #' @param rawBase rawBase class
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
-#' @export
+#' @noRd
 raw.showHistoryDB <- function(rawBase) {
   dbFilename = raw.getDatabase(rawBase)
   print(paste("DB name:",dbFilename))
@@ -129,6 +123,7 @@ raw.showHistoryDB <- function(rawBase) {
 #' @param token a number representing the time
 #' @param description string with description of update
 #' @importFrom DBI dbWriteTable
+#' @noRd
 .updateSQLhistory <- function(mydb, token, description) {
   tbl <- .getSQLtableNames()
   tblHist <- .readSQLhistory(mydb)
@@ -145,6 +140,7 @@ raw.showHistoryDB <- function(rawBase) {
 
 
 #' Returns SQLite table names
+#' @noRd
 .getSQLtableNames <- function() {
   list(
     tblNameAFM = paste0('afmData'),

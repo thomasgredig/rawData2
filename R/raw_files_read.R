@@ -6,7 +6,7 @@
 raw_files_read <- function() {
   raw_files_file <- file.path(
     dirname(raw_paths_file()),
-    "RAW_files.csv"
+    FILE_FILES
   )
 
   if (!file.exists(raw_files_file)) {

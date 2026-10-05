@@ -5,6 +5,7 @@
 #' @return A data frame containing the ID, ID2, final directory component, and
 #'   shortened filename for the files selected by `found`.
 #' @importFrom dplyr select mutate filter
+#' @importFrom stats na.omit
 #' @export
 raw_list <- function(IDlist = NULL, nLEN = 40, found = TRUE) {
   if (length(found) != 1L || !is.logical(found) || is.na(found)) {

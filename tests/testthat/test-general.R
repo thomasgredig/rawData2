@@ -83,7 +83,7 @@ test_that("raw_path_append migrates legacy path files", {
       date = "2026-01-01",
       stringsAsFactors = FALSE
     ),
-    file.path(".rawdata2", "RAW_paths.csv"),
+    file.path(".rawdata2", FILE_PATHS),
     row.names = FALSE
   )
 

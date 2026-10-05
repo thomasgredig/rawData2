@@ -9,7 +9,7 @@
 #'   `NA` for files that are not currently found.
 #' @importFrom digest digest
 #' @importFrom dplyr distinct select mutate filter row_number arrange group_by ungroup if_else left_join
-#' @importFrom utils write.csv
+#' @importFrom utils write.csv setTxtProgressBar txtProgressBar
 #' @export
 raw_update <- function(paths = c(), fastScan = TRUE) {
   if (length(fastScan) != 1L || !is.logical(fastScan) || is.na(fastScan)) {
@@ -219,7 +219,7 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
 rawFilesSave <- function(df_files) {
   raw_files_file <- file.path(
     dirname(raw_paths_file()),
-    "RAW_files.csv"
+    FILE_FILES
   )
 
   write.csv(

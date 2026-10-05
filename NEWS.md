@@ -1,5 +1,6 @@
 # rawdata2 0.3.4
 
+* add constants for file structure
 * handle case of two files with same name and file size but different content, so will return correct path
 * clean paths not available any longer in `raw_paths_read()`.
 

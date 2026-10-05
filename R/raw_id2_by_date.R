@@ -3,6 +3,7 @@
 #' @param date A single `Date` value or a date string in `YYYY-MM-DD` format.
 #' @return A list of unique `ID2` values requested on `date`. An empty list is
 #'   returned when no request log exists or no requests match.
+#' @importFrom utils read.delim
 #' @export
 raw_id2_by_date <- function(date = Sys.Date()) {
   if (inherits(date, "Date")) {

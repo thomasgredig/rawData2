@@ -16,6 +16,7 @@ Imports:
     cli,
     digest,
     dplyr,
+    stats,
     utils
 Suggests: 
     testthat (>= 3.0.0)
