@@ -4,7 +4,7 @@
 \alias{raw_paths_read}
 \title{Reads the RAW paths}
 \usage{
-raw_paths_read()
+raw_paths_read(clean = FALSE)
 }
 \value{
 A data frame of registered RAW paths and their metadata, including

@@ -20,39 +20,12 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
   for(path in paths) {
     raw_path_append(path)
   }
+
   # Read all paths to be searched.
   paths <- raw_paths_read()
   # Read the previous catalogue.
   old <- raw_files_read()
 
-  # helper function to remove paths
-  strip_directories <- function(f, p) {
-    f <- unlist(f, use.names = FALSE)
-    p <- unlist(p, use.names = FALSE)
-
-    clean <- function(x) {
-      x <- gsub("\\\\", "/", x)   # normalize Windows paths
-      sub("/+$", "", x)           # remove trailing slash
-    }
-
-    f <- clean(f)
-    p <- clean(p)
-
-    # Match the longest directory prefixes first
-    p <- p[order(nchar(p), decreasing = TRUE)]
-
-    vapply(f, function(file) {
-      matches <- startsWith(file, p) &
-        (nchar(file) == nchar(p) |
-           substr(file, nchar(p) + 1, nchar(p) + 1) == "/")
-
-      if (any(matches)) {
-        sub("^/", "", substring(file, nchar(p[which(matches)[1]]) + 1))
-      } else {
-        file
-      }
-    }, character(1))
-  }
 
   # create a DF if nothing exists
   if (nrow(old) == 0) {
@@ -84,26 +57,21 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
            ID2_new = ID2) |>
     distinct(file, filesize, .keep_all = TRUE)
 
-  if (nrow(lookup)>0) {
-    old <- old |>
-      mutate(file = basename(file)) |>
-      left_join(lookup, by = c("file", "filesize")) |>
-      mutate(
-        needs_update = !is.na(found) & !found & is.na(sha256),
-        sha256 = if_else(needs_update, sha256_new, sha256),
-        ID2    = if_else(needs_update, ID2_new, ID2)
-      ) |>
-      select(-sha256_new, -ID2_new, -needs_update)
+  old <- old |>
+    mutate(file = basename(file)) |>
+    left_join(lookup, by = c("file", "filesize")) |>
+    mutate(
+      needs_update = !is.na(found) & !found & is.na(sha256),
+      sha256 = if_else(needs_update, sha256_new, sha256),
+      ID2    = if_else(needs_update, ID2_new, ID2)
+    ) |>
+    select(-sha256_new, -ID2_new, -needs_update)
 
-    old <- old |>
-      arrange(ID) |>
-      group_by(sha256) |>
-      filter(is.na(sha256) | row_number() == 1) |>
-      ungroup()
-  }
-
-
-
+  old <- old |>
+    arrange(ID) |>
+    group_by(sha256) |>
+    filter(is.na(sha256) | row_number() == 1) |>
+    ungroup()
 
   # Search only paths marked as searchable.
   search_paths <- paths$path[paths$searchable %in% TRUE]
@@ -144,7 +112,8 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
   files <- unique(normalizePath(files, mustWork = TRUE))
 
   if (length(files) > 0) {
-    relative_files <- strip_directories(files, paths$path)
+    # relative_files <- strip_directories(files, paths$path)
+    relative_files <- files
     file_sizes <- as.numeric(file.size(files))
     previous_index <- match(relative_files, old$file)
 
@@ -172,7 +141,7 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
     close(pb)
 
     current <- data.frame(
-      file = relative_files,
+      file = strip_directories(files, paths$path),
       filesize = file_sizes,
       sha256 = checksums,
       stringsAsFactors = FALSE
@@ -187,7 +156,6 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
 
     # Find which current files match previous content.
     old_index <- match(current$sha256, old$sha256)
-
     matched <- !is.na(old_index)
 
     # Existing content: retain ID, update path, mark as found.
@@ -262,4 +230,41 @@ rawFilesSave <- function(df_files) {
   )
 
   raw_files_file
+}
+
+
+
+#' helper function to remove paths
+#' @noRd
+strip_directories <- function(f, p) {
+  f <- unlist(f, use.names = FALSE)
+  p <- unlist(p, use.names = FALSE)
+
+  clean <- function(x) {
+    x <- gsub("\\\\", "/", x)
+    sub("/+$", "", x)
+  }
+
+  f <- clean(f)
+  p <- clean(p)
+
+  # Try longest roots first
+  p <- p[order(nchar(p), decreasing = TRUE)]
+
+  vapply(f, function(file) {
+    matches <- vapply(
+      p,
+      function(root) {
+        file == root || startsWith(file, paste0(root, "/"))
+      },
+      logical(1)
+    )
+
+    if (any(matches)) {
+      root <- p[which(matches)[1]]
+      sub("^/", "", substring(file, nchar(root) + 1))
+    } else {
+      file
+    }
+  }, character(1))
 }

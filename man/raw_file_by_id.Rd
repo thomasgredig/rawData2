@@ -4,7 +4,7 @@
 \alias{raw_file_by_id}
 \title{Retrieve a RAW filename by ID}
 \usage{
-raw_file_by_id(ID)
+raw_file_by_id(ID, log = FALSE)
 }
 \arguments{
 \item{ID}{A numeric catalogue ID or a base64-style \code{ID2} value.}

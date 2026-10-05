@@ -1,6 +1,6 @@
 Package: rawdata2
 Title: RAW ID Manager for Reproducible Science
-Version: 0.3.3
+Version: 0.3.4
 Authors@R: 
     person("Thomas", "Gredig", , "tgredig@csulb.edu", 
           role = c("aut", "cre", "cph"),
@@ -13,6 +13,7 @@ Config/roxygen2/version: 8.1.0
 Imports: 
     DBI,
     RSQLite,
+    cli,
     digest,
     dplyr,
     utils

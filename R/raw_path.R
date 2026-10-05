@@ -25,7 +25,7 @@ raw_paths_file <- function() {
 #'   the logical `remote` column. If the catalogue does not exist, an empty
 #'   data frame is returned.
 #' @export
-raw_paths_read <- function() {
+raw_paths_read <- function(clean=FALSE) {
   file <- raw_paths_file()
 
   if (!file.exists(file)) {
@@ -42,12 +42,20 @@ raw_paths_read <- function() {
     stringsAsFactors = FALSE
   )
 
+
   # Treat paths from older catalogues as remote by default.
   if (!"remote" %in% names(paths_df)) {
     paths_df$remote <- TRUE
   }
 
-  raw_paths_reduce(paths_df)
+  paths_df <- raw_paths_reduce(paths_df)
+
+  if (clean) {
+    # remove any paths that no longer exist:
+    raw_path_trim()
+  }
+
+  paths_df
 }
 
 #' Appends a RAW path

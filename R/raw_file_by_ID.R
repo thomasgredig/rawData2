@@ -5,12 +5,16 @@
 #' @details Each request is appended to `RAW_log.txt` in the
 #'   `.rawdata2` directory with its `ID`, `ID2`, timestamp, and system user.
 #' @export
-raw_file_by_id <- function(ID) {
+raw_file_by_id <- function(ID, log=FALSE) {
   match_index <- raw_idxByID(ID)
 
   raw_files <- raw_files_read()
-  raw_file_by_id_append_log(ID, match_index, raw_files)
+  if (log) raw_file_by_id_append_log(ID, match_index, raw_files)
+
   filename <- raw_files$file[match_index]
+  db_size <- raw_files$filesize[match_index]
+  db_sha256 <- raw_files$sha256[match_index]
+
   if (file.exists(filename)) {
     f <- normalizePath(filename, winslash = "/", mustWork = FALSE)
     return(f)
@@ -54,15 +58,26 @@ raw_file_by_id <- function(ID) {
   }
 
   matches <- candidate_paths[found]
-
+  path_match = 1L # default
   if (length(matches) > 1L) {
-    message(
-      "File found in multiple RAW paths; returning the first match: ",
-      filename
-    )
+    # need to check sha256 as two files could have the same name, same size, but different sha256
+    actual_size = file.size(candidate_paths[found])
+    which(actual_size == db_size) -> path_match
+    if (length(path_match) > 1L) {
+      # still found multiple files with same name and size, need to read file and check sha256
+      actual_sha256 <- vapply(
+        candidate_paths,
+        digest::digest,
+        character(1),
+        algo = "sha256",
+        file = TRUE
+      )
+      idx <- which(actual_sha256 == db_sha256)
+      path_match <- path_match[idx]
+    }
   }
 
-  normalizePath(matches[1L], winslash = "/", mustWork = FALSE)
+  normalizePath(matches[path_match], winslash = "/", mustWork = FALSE)
 }
 
 

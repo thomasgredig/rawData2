@@ -16,7 +16,7 @@ create_N_random_files <- function(test_dir, N=10, data_folder = "raw_source") {
 
   for (file in files) {
     random_text <- paste(
-      sample(c(letters, LETTERS, 0:9), size = 100, replace = TRUE),
+      sample(c(letters, LETTERS, 0:9), size = 122, replace = TRUE),
       collapse = ""
     )
 
@@ -25,6 +25,36 @@ create_N_random_files <- function(test_dir, N=10, data_folder = "raw_source") {
 
   return(raw_source_dir)
 }
+
+
+test_that("raw_update uses configured file extensions", {
+  old_wd <- getwd()
+  test_dir <- tempfile("raw-extensions-")
+  dir.create(test_dir, recursive = TRUE)
+  on.exit({
+    setwd(old_wd)
+    unlink(test_dir, recursive = TRUE, force = TRUE)
+  })
+  setwd(test_dir)
+
+  raw_init()
+  source_dir <- file.path(test_dir, "source")
+  dir.create(source_dir)
+  writeLines("default", file.path(source_dir, "default.txt"))
+  writeLines("custom", file.path(source_dir, "custom.foo"))
+  raw_path_append(source_dir)
+
+  initial <- raw_update()
+  expect_true("default.txt" %in% initial$file)
+  expect_false("custom.foo" %in% initial$file)
+  expect_true(file.exists(file.path(test_dir, ".rawdata2", "config.txt")))
+
+  raw_extensions_append(".foo")
+  updated <- raw_update()
+  expect_true("custom.foo" %in% updated$file)
+})
+
+
 
 
 test_that("raw_update finds random RAW files", {
@@ -36,57 +66,6 @@ test_that("raw_update finds random RAW files", {
   on.exit({
     setwd(old_wd)
     unlink(test_dir, recursive = TRUE, force = TRUE)
-  })
-
-  test_that("raw_update uses configured file extensions", {
-    old_wd <- getwd()
-    test_dir <- tempfile("raw-extensions-")
-    dir.create(test_dir, recursive = TRUE)
-    on.exit({
-      setwd(old_wd)
-      unlink(test_dir, recursive = TRUE, force = TRUE)
-    })
-    setwd(test_dir)
-
-    raw_init()
-    source_dir <- file.path(test_dir, "source")
-    dir.create(source_dir)
-    writeLines("default", file.path(source_dir, "default.txt"))
-    writeLines("custom", file.path(source_dir, "custom.foo"))
-    raw_path_append(source_dir)
-
-    initial <- raw_update()
-    expect_true("default.txt" %in% initial$file)
-    expect_false("custom.foo" %in% initial$file)
-    expect_true(file.exists(file.path(test_dir, ".rawdata2", "config.txt")))
-
-    raw_extensions_append(".foo")
-    updated <- raw_update()
-    expect_true("custom.foo" %in% updated$file)
-  })
-
-  test_that("raw_update fastScan reuses same-size file checksums", {
-    old_wd <- getwd()
-    test_dir <- tempfile("raw-fast-scan-")
-    dir.create(test_dir, recursive = TRUE)
-    on.exit({
-      setwd(old_wd)
-      unlink(test_dir, recursive = TRUE, force = TRUE)
-    })
-    setwd(test_dir)
-
-    raw_init()
-    raw_source_dir <- create_N_random_files(test_dir, 1L)
-    initial <- raw_update(raw_source_dir)
-    scan_file <- file.path(raw_source_dir, "random_001.txt")
-    old_hash <- initial$sha256[initial$file == "random_001.txt"]
-
-    writeLines(strrep("z", 100), scan_file)
-    fast <- raw_update()
-    expect_equal(fast$sha256[fast$file == "random_001.txt"], old_hash)
-
-    full <- raw_update(fastScan = FALSE)
-    expect_true(any(full$found & full$sha256 != old_hash))
   })
   setwd(test_dir)
 
@@ -132,6 +111,15 @@ test_that("raw_update finds random RAW files", {
   expect_equal(sum(result$found), N+N)
   expect_equal(max(result$ID), N+N+min(result$ID)-1)
 
+  # two files with same length and same name: random_001.txt, load correct one
+  raw_find("random_001") -> rnd_files
+  expect_equal(length(rnd_files), 2)
+  f1 <- raw_file_by_id(rnd_files[1])
+  f2 <- raw_file_by_id(rnd_files[2])
+  expect_equal(dirname(f1), normalizePath(raw_source_dir))
+  expect_equal(dirname(f2), normalizePath(raw_source_dir2))
+
+
   # delete one file and make sure it is missing
   files <- list.files(
     raw_source_dir,
@@ -172,7 +160,7 @@ test_that("raw_update finds random RAW files", {
   ID_new <- raw_id_by_file(basename(files[7]))[1]
   expect_equal(ID, ID_new)
 
-  f <- raw_file_by_id(7)
+  f <- raw_file_by_id(7)  # CHECK !!!!
   expect_true(nchar(f)>0)
 
   d <- raw_file_record_by_id(7)

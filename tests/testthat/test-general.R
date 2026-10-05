@@ -20,7 +20,7 @@ test_that("find root directory", {
   expect_true(p$remote)
   expect_warning({result=raw_update()})
   expect_equal(nrow(result),0L)
-  expect_warning({f <- raw_file_by_id(8778)})
+  expect_warning({f <- raw_file_by_id(8778, log=TRUE)})
 
   expect_true(is.na(f))
   request_log <- file.path(test_dir, ".rawdata2", "RAW_log.txt")
