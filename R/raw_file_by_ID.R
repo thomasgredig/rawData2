@@ -52,9 +52,23 @@ raw_file_by_id <- function(ID, log=FALSE) {
   found <- file.exists(candidate_paths)
 
   if (!any(found)) {
-    warning("File not found in any registered RAW path: ", filename,"\n",
-            "Consider adding paths with raw_path_append() and/or run raw_update() again.")
-    return(NA_character_)
+    # check if it was moved to another folder
+    for(p in raw_paths$path) {
+      candidate_paths <- c()
+      if (dir.exists(p)) {
+        dir(p,pattern=basename(filename),
+            fixed=TRUE, recursive = TRUE, full.names = TRUE) -> file_list
+        candidate_paths = c(candidate_paths, file_list)
+      }
+    }
+    if (length(candidate_paths)==0L) {
+      warning("File not found in any registered RAW path: ", filename,"\n",
+              "Consider adding paths with raw_path_append() and/or run raw_update() again.")
+      return(NA_character_)
+    } else {
+      found <- file.exists(candidate_paths)
+    }
+
   }
 
   matches <- candidate_paths[found]

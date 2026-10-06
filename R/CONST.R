@@ -4,7 +4,7 @@
 # path file
 FILE_PATHS = "RAW_paths.csv"
 # files file
-FILE_FILES = "RAW.csv"
+FILE_FILES = "RAW_files.csv"
 # log file
 FILE_LOG = "RAW_log.txt"
 # file extensions

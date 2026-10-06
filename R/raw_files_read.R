@@ -10,6 +10,7 @@ raw_files_read <- function() {
   )
 
   if (!file.exists(raw_files_file)) {
+    message("RAW file list not found: ", raw_files_file)
     return(data.frame(
       ID = numeric(),
       ID2 = character(),
