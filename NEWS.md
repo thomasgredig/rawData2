@@ -1,3 +1,7 @@
+# rawdata2 0.3.5
+
+* remove duplicates that have not ID2 but same filename and same ID
+
 # rawdata2 0.3.4
 
 * add constants for file structure
