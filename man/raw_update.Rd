@@ -4,7 +4,7 @@
 \alias{raw_update}
 \title{Update the RAW file catalogue with SHA-256 checksums and file sizes}
 \usage{
-raw_update(paths = c(), fastScan = TRUE)
+raw_update(paths = c(), fastScan = TRUE, verify = FALSE)
 }
 \arguments{
 \item{paths}{A character vector of paths to register before updating the

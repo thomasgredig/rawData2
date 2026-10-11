@@ -9,6 +9,7 @@ export(raw_file_by_id)
 export(raw_file_record_by_id)
 export(raw_files_read)
 export(raw_find)
+export(raw_getCRC)
 export(raw_getDatabase)
 export(raw_getID)
 export(raw_id2_by_date)
@@ -41,11 +42,13 @@ importFrom(dplyr,
   if_else,
   left_join,
   mutate,
+  n,
   row_number,
   select,
   ungroup
 )
 importFrom(stats,na.omit)
+importFrom(tools,md5sum)
 importFrom(utils,
   read.csv,
   read.delim,

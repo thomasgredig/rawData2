@@ -50,7 +50,7 @@ test_that("raw_update uses configured file extensions", {
   expect_true(file.exists(file.path(test_dir, ".rawdata2", "config.txt")))
 
   raw_extensions_append(".foo")
-  updated <- raw_update()
+  updated <- raw_update(verify=TRUE)
   expect_true("custom.foo" %in% updated$file)
 })
 

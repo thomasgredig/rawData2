@@ -8,10 +8,10 @@
 #'   `filesize` column contains the size of each found file in bytes and is
 #'   `NA` for files that are not currently found.
 #' @importFrom digest digest
-#' @importFrom dplyr distinct select mutate filter row_number arrange group_by ungroup if_else left_join
+#' @importFrom dplyr distinct select mutate filter n row_number arrange group_by ungroup if_else left_join
 #' @importFrom utils write.csv setTxtProgressBar txtProgressBar
 #' @export
-raw_update <- function(paths = c(), fastScan = TRUE) {
+raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
   if (length(fastScan) != 1L || !is.logical(fastScan) || is.na(fastScan)) {
     stop("'fastScan' must be a single TRUE or FALSE value.")
   }
@@ -25,6 +25,23 @@ raw_update <- function(paths = c(), fastScan = TRUE) {
   paths <- raw_paths_read()
   # Read the previous catalogue.
   old <- raw_files_read()
+
+  if (verify) {
+    # find same ID, filename, and file size
+    old <- old |>
+      mutate(filename = basename(file)) |>
+      dplyr::group_by(ID, filesize, filename) |>
+      dplyr::filter(!(dplyr::n() > 1 & is.na(ID2))) |>
+      dplyr::ungroup() |>
+      select(!filename)
+    ##
+    old <- old |>
+      mutate(filename = basename(file)) |>
+      dplyr::group_by(ID, filename) |>
+      dplyr::filter(!(dplyr::n() > 1 & is.na(ID2))) |>
+      dplyr::ungroup() |>
+      select(!filename)
+  }
 
 
   # create a DF if nothing exists
