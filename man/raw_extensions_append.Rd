@@ -4,11 +4,13 @@
 \alias{raw_extensions_append}
 \title{Add file extensions used by \code{raw_update()}}
 \usage{
-raw_extensions_append(extensions)
+raw_extensions_append(extensions = NULL, default = FALSE)
 }
 \arguments{
 \item{extensions}{Character vector of extensions, with or without leading
 dots.}
+
+\item{default}{logical, if true sets the default}
 }
 \value{
 Invisibly, the complete configured extension vector.

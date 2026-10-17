@@ -4,7 +4,12 @@
 \alias{raw_paths_read}
 \title{Reads the RAW paths}
 \usage{
-raw_paths_read(clean = FALSE)
+raw_paths_read(clean = FALSE, all = FALSE)
+}
+\arguments{
+\item{clean}{logical, removes paths which do not exist}
+
+\item{all}{logical, return also non-searchable paths}
 }
 \value{
 A data frame of registered RAW paths and their metadata, including

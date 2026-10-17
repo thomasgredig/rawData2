@@ -18,5 +18,5 @@ Retrieve a RAW filename by ID
 }
 \details{
 Each request is appended to \code{RAW_log.txt} in the
-\code{.rawdata2} directory with its \code{ID}, \code{ID2}, timestamp, and system user.
+RAWDATA_FOLDER directory with its \code{ID}, \code{ID2}, timestamp, and system user.
 }

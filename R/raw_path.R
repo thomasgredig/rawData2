@@ -7,10 +7,10 @@ raw_paths_file <- function() {
   root_dir <- find_raw_root()
 
   if (is.na(root_dir)) {
-    stop("No root directory for .rawdata2 is found; create a GIT or make a folder `.rawdata2` in the root directory.")
+    stop("No root directory for .rawdata2 is found; create a GIT or make a folder `",RAWDATA_FOLDER,"` in the root directory.")
   }
 
-  rawdata_dir <- file.path(root_dir, ".rawdata2")
+  rawdata_dir <- file.path(root_dir, RAWDATA_FOLDER)
 
   if (!dir.exists(rawdata_dir)) {
     dir.create(rawdata_dir, recursive = TRUE)
@@ -21,11 +21,14 @@ raw_paths_file <- function() {
 
 
 #' Reads the RAW paths
+#' @param clean logical, removes paths which do not exist
+#' @param all logical, return also non-searchable paths
+#' @importFrom dplyr filter
 #' @return A data frame of registered RAW paths and their metadata, including
 #'   the logical `remote` column. If the catalogue does not exist, an empty
 #'   data frame is returned.
 #' @export
-raw_paths_read <- function(clean=FALSE) {
+raw_paths_read <- function(clean=FALSE, all=FALSE) {
   file <- raw_paths_file()
 
   if (!file.exists(file)) {
@@ -55,6 +58,11 @@ raw_paths_read <- function(clean=FALSE) {
     raw_path_trim()
   }
 
+  if (!all) {
+    paths_df <- paths_df |>
+      filter(searchable == TRUE)
+  }
+
   paths_df
 }
 
@@ -80,7 +88,7 @@ raw_path_append <- function(path, searchable = TRUE, remote = TRUE) {
     stop("'remote' must be a single TRUE or FALSE value.")
   }
 
-  file <- raw_paths_file()
+  file_list <- raw_paths_file()
   existing_paths <- raw_paths_read()
 
   # Ensure older path files have the current columns.
@@ -145,7 +153,7 @@ raw_path_append <- function(path, searchable = TRUE, remote = TRUE) {
 
   write.csv(
     all_paths,
-    file = file,
+    file = file_list,
     row.names = FALSE,
     quote = TRUE
   )
@@ -231,4 +239,30 @@ raw_path_trim <- function() {
   }
 
   invisible(all_paths)
+}
+
+#' Writes RAW paths
+#' @importFrom utils write.csv
+#' @noRd
+raw_path_write <- function(df) {
+  saved_csv = FALSE
+  if (nrow(df)>0) {
+    required <- c("ID", "path", "searchable", "remote", "user", "date")
+    missing_columns <- setdiff(required, names(df))
+
+    if (length(missing_columns) == 0) {
+      write.csv(
+        df,
+        file =  raw_paths_file(),
+        row.names = FALSE,
+        quote = TRUE
+      )
+      saved_csv = TRUE
+    } else {
+      warning("PATH data frame does not have correct columns.")
+    }
+
+  }
+
+  invisible(saved_csv)
 }

@@ -4,10 +4,7 @@
 \alias{find_raw_root}
 \title{Finds the directory with .rawdata2}
 \usage{
-find_raw_root(path = getwd())
-}
-\arguments{
-\item{path}{A starting directory.}
+find_raw_root()
 }
 \value{
 The normalized path of the nearest directory containing \code{.rawdata2}

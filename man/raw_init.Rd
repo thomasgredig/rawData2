@@ -4,7 +4,10 @@
 \alias{raw_init}
 \title{Initializes the .rawdata2 directory}
 \usage{
-raw_init()
+raw_init(make_paths_unsearchable = FALSE)
+}
+\arguments{
+\item{make_paths_unsearchable}{marks all paths as unsearchable}
 }
 \value{
 The normalized path to the initialized \code{.rawdata2} directory.

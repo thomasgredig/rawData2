@@ -1,16 +1,9 @@
 test_that("raw_find can match two literal filename fragments", {
-  old_wd <- getwd()
   test_dir <- tempfile("raw-find-")
-  dir.create(test_dir, recursive = TRUE)
-  on.exit({
-    setwd(old_wd)
-    unlink(test_dir, recursive = TRUE, force = TRUE)
-  })
-  setwd(test_dir)
-
-  raw_init()
+  raw_init(make_paths_unsearchable = TRUE)
   source_dir <- file.path(test_dir, "source")
-  dir.create(source_dir)
+  dir.create(source_dir, recursive = TRUE)
+
   filenames <- c(
     "202609.Topography.txt",
     "202609XTopography.txt",
@@ -31,4 +24,7 @@ test_that("raw_find can match two literal filename fragments", {
     raw_find("Topography.txt", "202609."),
     matching_id
   )
+
+  unlink(test_dir, recursive = TRUE, force = TRUE)
+
 })

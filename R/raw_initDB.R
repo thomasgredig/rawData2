@@ -47,7 +47,7 @@ raw_get_SQL_database <- function() {
     stop("No root directory found.")
   }
 
-  rawdata_dir <- file.path(root_dir, ".rawdata2")
+  rawdata_dir <- file.path(root_dir, RAWDATA_FOLDER)
 
   if (!dir.exists(rawdata_dir)) {
     dir.create(rawdata_dir, recursive = TRUE)

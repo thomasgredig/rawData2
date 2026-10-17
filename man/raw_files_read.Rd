@@ -4,7 +4,7 @@
 \alias{raw_files_read}
 \title{Read the RAW file catalogue}
 \usage{
-raw_files_read()
+raw_files_read(path = dirname(raw_paths_file()))
 }
 \value{
 A data frame containing the RAW file catalogue. If the catalogue

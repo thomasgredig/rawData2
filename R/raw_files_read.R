@@ -3,9 +3,9 @@
 #'   does not exist, an empty data frame with the catalogue columns is returned.
 #' @importFrom utils read.csv
 #' @export
-raw_files_read <- function() {
+raw_files_read <- function(path = dirname(raw_paths_file())) {
   raw_files_file <- file.path(
-    dirname(raw_paths_file()),
+    path,
     FILE_FILES
   )
 

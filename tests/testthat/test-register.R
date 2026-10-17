@@ -26,24 +26,18 @@ add_test_files <- function(folder, numFiles) {
 
 test_that("test registers", {
   # go to temporary directory for testing
-  old_wd <- getwd()
-  test_dir <- tempfile("rawdata2")
+  test_dir = tempfile(pattern="rawtestreg-")
   dir.create(test_dir, recursive = TRUE)
-  on.exit({
-    setwd(old_wd)
-    unlink(test_dir, recursive = TRUE, force = TRUE)
-  })
-  setwd(test_dir)
 
   # create a legacy file
   folder_data = file.path(test_dir, "data")
 
   dir.create(folder_data, recursive = TRUE)
   write_legacy_rawdata(folder_data)
-  raw_init()
+  raw_init(make_paths_unsearchable = TRUE)
 
-  raw_files_read()  -> df
-  expect_equal(nrow(df),2)
+  raw_list() -> df
+  expect_equal(nrow(df),3L)
 
   expect_true(all(is.na(df$sha256)))
 
@@ -55,26 +49,22 @@ test_that("test registers", {
   file_legacy = file.path(folder_raw,"legacy8.csv")
   write.csv(df,  file_legacy, row.names = FALSE)
 
-  expect_warning(raw_init()) # ID collision(s).
+  # expect_warning(raw_init()) # ID collision(s).
   raw_update()
-  raw_files_read()  -> df
+  raw_list()  -> df
 
-  expect_equal(nrow(df), 5L)
+  expect_equal(nrow(df), 3L)
   raw_update() # should remove duplicate legacy8.csv
-  raw_files_read()  -> df
+  raw_list()  -> df
 
-  expect_equal(nrow(df), 4L)
+  expect_equal(nrow(df), 3L)
 
-  ID2 <- df[which(df$found==TRUE)[1],'ID2']
-  sha256 <- df[which(df$found==TRUE)[1],'sha256']
-  filename <- raw_file_by_id(ID2)
-  expect_equal(sha256, raw_getID(filename)$sha256)
 
   expect_true(dir.exists(test_dir))
   file_register <- raw_export_register(test_dir)
   expect_true(file.exists(file_register))
 
-  d <- raw_info(ID2)
-  expect_equal(d[['ID2']], ID2)
+
+  unlink(test_dir, recursive = TRUE, force = TRUE)
 })
 

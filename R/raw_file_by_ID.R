@@ -3,7 +3,7 @@
 #' @return The normalized path to the matching file, or `NA_character_` when
 #'   the file cannot be found.
 #' @details Each request is appended to `RAW_log.txt` in the
-#'   `.rawdata2` directory with its `ID`, `ID2`, timestamp, and system user.
+#'  RAWDATA_FOLDER directory with its `ID`, `ID2`, timestamp, and system user.
 #' @export
 raw_file_by_id <- function(ID, log=FALSE) {
   match_index <- raw_idxByID(ID)

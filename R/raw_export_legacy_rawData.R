@@ -1,5 +1,9 @@
 #' Exports legacy rawData if available
-#' @export
+#' @description
+#' This is called from raw_init() and checks whether there is
+#' a legacy file system.
+#' @param root_dir root directory
+#' @noRd
 raw_export_legacy_rawData <- function(root_dir) {
   folder_data = file.path(root_dir, "data")
   rawBase_file = file.path(folder_data, "rawBase.csv")

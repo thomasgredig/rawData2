@@ -2,7 +2,6 @@
 
 export(find_raw_root)
 export(git_username)
-export(raw_export_legacy_rawData)
 export(raw_export_register)
 export(raw_extensions_append)
 export(raw_file_by_id)
@@ -47,8 +46,15 @@ importFrom(dplyr,
   select,
   ungroup
 )
+importFrom(rprojroot,
+  find_root,
+  is_r_package
+)
 importFrom(stats,na.omit)
-importFrom(tools,md5sum)
+importFrom(tools,
+  R_user_dir,
+  md5sum
+)
 importFrom(utils,
   read.csv,
   read.delim,

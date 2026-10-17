@@ -1,3 +1,6 @@
+* make sure RCHECK passes
+* use `tools::R_user_dir()` for a project-based root
+
 # rawdata2 0.3.5
 
 * remove duplicates that have not ID2 but same filename and same ID
@@ -35,7 +38,7 @@
 # rawdata2 0.2.2
 
 * configure additional `raw_update()` file extensions in
-  `.rawdata2/config.txt` with `raw_extensions_append()`
+  `.rawdata2/FILE_EXT` with `raw_extensions_append()`
 * record `raw_file_by_id()` requests in `.rawdata2/RAW_log.txt`
 * add `raw_id2_by_date()` to retrieve unique requested ID2 values by date
 
