@@ -1,4 +1,4 @@
-test_that("raw_find can match two literal filename fragments", {
+test_that("raw_find can match two literal filename fragments",  suppressMessages({
   test_dir <- tempfile("raw-find-")
   raw_init(make_paths_unsearchable = TRUE)
   source_dir <- file.path(test_dir, "source")
@@ -27,4 +27,4 @@ test_that("raw_find can match two literal filename fragments", {
 
   unlink(test_dir, recursive = TRUE, force = TRUE)
 
-})
+}))

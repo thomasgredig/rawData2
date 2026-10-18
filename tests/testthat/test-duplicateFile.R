@@ -1,33 +1,4 @@
-set.seed(1234)
-
-create_N_random_files <- function(test_dir, N=5, data_folder = "raw_source") {
-  # Create the directory containing the random RAW files.
-  raw_source_dir <- file.path(test_dir, data_folder)
-  dir.create(
-    raw_source_dir,
-    recursive = TRUE,
-    showWarnings = FALSE
-  )
-
-  files <- file.path(
-    raw_source_dir,
-    sprintf("random_%03d.txt", seq_len(N))
-  )
-
-  for (file in files) {
-    random_text <- paste(
-      sample(c(letters, LETTERS, 0:9), size = 100, replace = TRUE),
-      collapse = ""
-    )
-
-    writeLines(random_text, file)
-  }
-
-  return(raw_source_dir)
-}
-
-
-test_that("duplicate and missing files", {
+test_that("duplicate and missing files", suppressMessages({
   test_dir <- tempfile("raw-")
   dir.create(test_dir, recursive = TRUE)
 
@@ -75,4 +46,4 @@ test_that("duplicate and missing files", {
   expect_equal(nrow(f), 1L)
 
   unlink(test_dir, recursive = TRUE, force = TRUE)
-})
+}))

@@ -4,7 +4,7 @@
 \alias{raw_info}
 \title{Information about the file}
 \usage{
-raw_info(ID)
+raw_info(ID, pkg = NULL)
 }
 \arguments{
 \item{ID}{A numeric catalogue ID or a base64-style \code{ID2} value or integer \code{ID}.}

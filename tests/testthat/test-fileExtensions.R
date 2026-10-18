@@ -1,4 +1,4 @@
-test_that("raw_update uses configured file extensions", {
+test_that("raw_update uses configured file extensions",  suppressMessages({
   test_dir <- tempfile("raw-extensions-")
   p <- raw_init(make_paths_unsearchable = TRUE)
 
@@ -20,5 +20,5 @@ test_that("raw_update uses configured file extensions", {
   expect_true("custom.foo" %in% updated$filename)
 
   unlink(test_dir, recursive = TRUE, force = TRUE)
-})
+}))
 

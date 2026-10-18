@@ -6,8 +6,8 @@
 #' @details Each request is appended to `RAW_log.txt` in the
 #'  RAWDATA_FOLDER directory with its `ID`, `ID2`, timestamp, and system user.
 #' @export
-raw_file_by_id <- function(ID, log=FALSE) {
-  match_index <- raw_idxByID(ID)
+raw_file_by_id <- function(ID, pkg=NULL, log=FALSE) {
+  match_index <- raw_idxByID(ID, pkg)
 
   raw_files <- raw_files_read()
   if (log) raw_file_by_id_append_log(ID, match_index, raw_files)

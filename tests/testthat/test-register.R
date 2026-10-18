@@ -24,7 +24,7 @@ add_test_files <- function(folder, numFiles) {
   }
 }
 
-test_that("test registers", {
+test_that("test registers",  suppressMessages({
   # go to temporary directory for testing
   test_dir = tempfile(pattern="rawtestreg-")
   dir.create(test_dir, recursive = TRUE)
@@ -66,5 +66,5 @@ test_that("test registers", {
 
 
   unlink(test_dir, recursive = TRUE, force = TRUE)
-})
+}))
 

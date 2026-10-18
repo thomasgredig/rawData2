@@ -141,13 +141,15 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
       !is.na(old$filesize[previous_index]) &
       old$filesize[previous_index] == file_sizes
 
-    pb <- txtProgressBar(min = 0, max = length(files), style = 3)
+    if (interactive()) {
+      pb <- txtProgressBar(min = 0, max = length(files), style = 3)
+    }
 
     checksums <- vapply(seq_along(files), function(i) {
       if (can_reuse[i] & !is.na(old$sha256[previous_index[i]])) {
         old$sha256[previous_index[i]]
       } else {
-        setTxtProgressBar(pb, i)
+        if (interactive()) { setTxtProgressBar(pb, i) }
 
         digest(
           files[[i]],
@@ -157,7 +159,7 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
       }
     }, character(1))
 
-    close(pb)
+    if (interactive()) { close(pb) }
 
     current <- data.frame(
       file = strip_directories(files, paths$path),

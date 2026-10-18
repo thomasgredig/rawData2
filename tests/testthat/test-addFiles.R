@@ -1,4 +1,4 @@
-test_that("raw_update handles renamed files and updates", {
+test_that("raw_update handles renamed files and updates", suppressMessages({
   N <- 3L  # Change this to any value from 1 through 40
   test_dir <- tempfile("raw-test-")
   dir.create(test_dir, recursive = TRUE)
@@ -53,10 +53,10 @@ test_that("raw_update handles renamed files and updates", {
   expect_equal(nrow(result), N+N-1)
 
   unlink(test_dir, recursive = TRUE, force = TRUE)
-})
+}))
 
 
-test_that("raw_update handles renaming files", {
+test_that("raw_update handles renaming files", suppressMessages({
   N <- 5L  # Change this to any value from 1 through 40
   test_dir <- tempfile("raw-rename-")
   dir.create(test_dir, recursive = TRUE)
@@ -87,9 +87,9 @@ test_that("raw_update handles renaming files", {
   expect_true(ID2 %in% find_renamed$ID2)
 
   unlink(test_dir, recursive = TRUE, force = TRUE)
-})
+}))
 
-test_that("raw_update handles moving file to different directory", {
+test_that("raw_update handles moving file to different directory", suppressMessages({
   N <- 4L  # Change this to any value from 1 through 40
   test_dir <- tempfile("raw-dir1-")
   dir.create(test_dir, recursive = TRUE)
@@ -132,4 +132,4 @@ test_that("raw_update handles moving file to different directory", {
 
   unlink(test_dir, recursive = TRUE, force = TRUE)
   unlink(test_dir2, recursive = TRUE, force = TRUE)
-})
+}))

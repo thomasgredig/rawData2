@@ -1,4 +1,4 @@
-test_that("find root directory", {
+test_that("find root directory",  suppressMessages({
   # start code here
   raw_init()
   p_root <- find_raw_root()
@@ -13,10 +13,10 @@ test_that("find root directory", {
   idx <- which(p$path==p_not)
   expect_equal(length(idx),1L)
   expect_true(!p$remote[idx])
-})
+}))
 
 
-test_that("check log file from raw_file_by_id", {
+test_that("check log file from raw_file_by_id",  suppressMessages({
   p_root <- find_raw_root()
   raw_init(make_paths_unsearchable = TRUE)
   test_dir <- tempfile("raw-test1-")
@@ -48,10 +48,10 @@ test_that("check log file from raw_file_by_id", {
     log_lines[last_log_line],
     paste0("^\\d+\t.*\t[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:")
   )
-})
+}))
 
 
-test_that("raw_path_append records local paths", {
+test_that("raw_path_append records local paths",  suppressMessages({
   raw_init(make_paths_unsearchable = TRUE)
   raw_path_append("local-path", remote = FALSE)
 
@@ -60,7 +60,7 @@ test_that("raw_path_append records local paths", {
   raw_path_trim()
   paths <- raw_paths_read()
   expect_equal(nrow(paths), 0L)
-})
+}))
 
 # test_that("raw_path_append migrates legacy path files", {
 #   test_dir <- tempfile("raw-path-legacy-")
