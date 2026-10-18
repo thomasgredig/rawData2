@@ -21,8 +21,8 @@ raw_paths_file <- function() {
 
 
 #' Reads the RAW paths
-#' @param clean logical, removes paths which do not exist
-#' @param all logical, return also non-searchable paths
+#' @param clean Logical; if `TRUE`, remove paths that no longer exist.
+#' @param all Logical; if `TRUE`, include non-searchable paths.
 #' @importFrom dplyr filter
 #' @return A data frame of registered RAW paths and their metadata, including
 #'   the logical `remote` column. If the catalogue does not exist, an empty
@@ -242,7 +242,9 @@ raw_path_trim <- function() {
 }
 
 #' Writes RAW paths
+#' @param df A data frame containing the RAW path records to write.
 #' @importFrom utils write.csv
+#' @return Invisibly, a logical indicating whether the data frame was saved.
 #' @noRd
 raw_path_write <- function(df) {
   saved_csv = FALSE

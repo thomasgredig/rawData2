@@ -1,4 +1,4 @@
-#' exports the RAWdata register to the target_path
+#' Export the RAWdata register to a directory
 #' @param target_path A directory in which to write the exported register.
 #' @return The path to the exported register, or `NA_character_` when
 #'   `target_path` does not exist.
@@ -19,7 +19,7 @@ raw_export_register <- function(target_path) {
   fname
 }
 
-#' imports the RAWdata register
+#' Import compatible RAWdata registers
 #' @param recursive Logical; should registered paths be searched recursively?
 #' @return `NULL`. The catalogue is updated as compatible register files are
 #'   imported.
@@ -58,7 +58,7 @@ raw_import_register <- function(recursive=FALSE) {
 #' @noRd
 #' @param df1 The first RAW file catalogue data frame.
 #' @param df2 The second RAW file catalogue data frame.
-#' @return A merged catalogue with duplicate `ID2` entries removed.
+#' @return A merged catalogue containing the columns from both inputs.
 raw_merge <- function(df1, df2) {
   if (!"filesize" %in% names(df1)) {
     df1$filesize <- NA_real_

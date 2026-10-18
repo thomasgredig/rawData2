@@ -6,8 +6,8 @@
 \usage{
 raw_initDB()
 }
-\arguments{
-\item{rawBase}{object, use create_rawBase()}
+\value{
+The path to the initialized SQLite database.
 }
 \description{
 Create and initialize a database, if none exists. The SQLite
@@ -17,7 +17,6 @@ name of the package, includes the version number and ends
 with .sqlite. Before creating a new database, it checks whether
 a database already exists; it might have an older version. If
 so, then it updates (renames) the file to correspond to the
-latest version. The rawBase object stores information to what
-is stored in this separate database, in case it gets lost or
-needs to be recreated.
+latest version. The database path is stored in the package's configured
+\code{.rawdata2} directory.
 }

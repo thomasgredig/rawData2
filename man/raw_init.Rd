@@ -7,7 +7,8 @@
 raw_init(make_paths_unsearchable = FALSE)
 }
 \arguments{
-\item{make_paths_unsearchable}{marks all paths as unsearchable}
+\item{make_paths_unsearchable}{Logical; if \code{TRUE}, mark all registered paths
+as unsearchable after initialization.}
 }
 \value{
 The normalized path to the initialized \code{.rawdata2} directory.

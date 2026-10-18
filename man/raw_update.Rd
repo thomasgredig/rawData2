@@ -13,6 +13,9 @@ catalogue.}
 \item{fastScan}{Logical; if \code{TRUE}, reuse a registered SHA-256 checksum
 when the file has the same registered path and filesize. Files without a
 matching path and filesize are still hashed.}
+
+\item{verify}{Logical; if \code{TRUE}, remove duplicate incomplete records before
+scanning.}
 }
 \value{
 Invisibly, the updated RAW file catalogue as a data frame. The

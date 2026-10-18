@@ -1,7 +1,8 @@
 #' Initializes the .rawdata2 directory
 #'
 #' @return The normalized path to the initialized `.rawdata2` directory.
-#' @param make_paths_unsearchable marks all paths as unsearchable
+#' @param make_paths_unsearchable Logical; if `TRUE`, mark all registered paths
+#'   as unsearchable after initialization.
 #' @export
 raw_init <- function(make_paths_unsearchable = FALSE) {
   root_dir <- find_raw_root()
@@ -26,7 +27,7 @@ raw_init <- function(make_paths_unsearchable = FALSE) {
       files_to_move = c(FILE_PATHS, FILE_FILES, FILE_EXT, FILE_LOG, FILE_DB)
       for(f in files_to_move) {
         fname = file.path(rawdata_legacy, f)
-        if (file.exists(f)) {
+        if (file.exists(fname)) {
           message("Moving legacy file: ", fname)
           file.rename(from = fname, to = file.path(rawdata_dir,f))
         }
@@ -54,4 +55,30 @@ raw_init <- function(make_paths_unsearchable = FALSE) {
   }
 
   invisible(normalizePath(rawdata_dir, mustWork = TRUE))
+}
+
+#' @export
+raw_init_legacy <- function() {
+  message("Checking for legacy data.")
+  # check for legacy .rawdata2 directory elsewhere and copy files as needed
+  path_legacy = getLegacyRoot()
+  root_dir <- find_raw_root()
+  rawdata_dir <- file.path(root_dir, RAWDATA_FOLDER)
+  message("Looking for path: ", path_legacy)
+  rawdata_legacy <- file.path(path_legacy, RAWDATA_FOLDER_LEGACY)
+  if (dir.exists(rawdata_legacy)) {
+    message("Found legacy path; searching for files to copy.")
+    files_to_move = c(FILE_PATHS, FILE_FILES, FILE_EXT, FILE_LOG, FILE_DB)
+    for(f in files_to_move) {
+      fname = file.path(rawdata_legacy, f)
+      if (file.exists(fname)) {
+        message("Moving legacy file: ", fname)
+        file.rename(from = fname, to = file.path(rawdata_dir,f))
+      } else {
+        message("Legacy file not found: ", fname)
+      }
+    }
+  } else {
+    message("Legacy folder not found.")
+  }
 }

@@ -7,9 +7,9 @@
 raw_paths_read(clean = FALSE, all = FALSE)
 }
 \arguments{
-\item{clean}{logical, removes paths which do not exist}
+\item{clean}{Logical; if \code{TRUE}, remove paths that no longer exist.}
 
-\item{all}{logical, return also non-searchable paths}
+\item{all}{Logical; if \code{TRUE}, include non-searchable paths.}
 }
 \value{
 A data frame of registered RAW paths and their metadata, including

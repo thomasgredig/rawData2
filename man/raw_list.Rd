@@ -7,6 +7,9 @@
 raw_list(IDlist = NULL, nLEN = 40, found = TRUE)
 }
 \arguments{
+\item{IDlist}{Optional numeric vector of catalogue IDs or character vector
+of \code{ID2} values to include.}
+
 \item{nLEN}{Maximum number of trailing characters to show for each filename.}
 
 \item{found}{Logical; if \code{TRUE}, return files currently marked as found. If

@@ -1,4 +1,6 @@
 #' Lists all available files
+#' @param IDlist Optional numeric vector of catalogue IDs or character vector
+#'   of `ID2` values to include.
 #' @param nLEN Maximum number of trailing characters to show for each filename.
 #' @param found Logical; if `TRUE`, return files currently marked as found. If
 #'   `FALSE`, return files that are not currently found.

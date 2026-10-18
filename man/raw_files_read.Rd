@@ -6,6 +6,9 @@
 \usage{
 raw_files_read(path = dirname(raw_paths_file()))
 }
+\arguments{
+\item{path}{Directory containing the RAW file catalogue.}
+}
 \value{
 A data frame containing the RAW file catalogue. If the catalogue
 does not exist, an empty data frame with the catalogue columns is returned.

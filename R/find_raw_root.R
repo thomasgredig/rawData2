@@ -9,6 +9,9 @@ find_raw_root <- function() {
 }
 
 #' Finds a directory for the root (rawdata2 > 0.4)
+#'
+#' @return The package data directory or `NA_character_` when no root can be
+#'   determined.
 #' @importFrom tools R_user_dir
 #' @importFrom rprojroot find_root is_r_package
 #' @noRd
@@ -33,6 +36,8 @@ getRPojectRoot <- function() {
   user_dir
 }
 
+#' @return The nearest directory containing the legacy RAW data or `.git`, or
+#'   `NA_character_` when none is found.
 #' @noRd
 getLegacyRoot <- function() {
   path = getwd()

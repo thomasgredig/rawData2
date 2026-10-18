@@ -7,11 +7,10 @@
 #' with .sqlite. Before creating a new database, it checks whether
 #' a database already exists; it might have an older version. If
 #' so, then it updates (renames) the file to correspond to the
-#' latest version. The rawBase object stores information to what
-#' is stored in this separate database, in case it gets lost or
-#' needs to be recreated.
+#' latest version. The database path is stored in the package's configured
+#' `.rawdata2` directory.
 #'
-#' @param rawBase object, use create_rawBase()
+#' @return The path to the initialized SQLite database.
 #'
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
@@ -40,6 +39,8 @@ raw_initDB <- function() {
 
 
 #' returns the name of the SQL database
+#'
+#' @return The path to the configured SQLite database file.
 #' @noRd
 raw_get_SQL_database <- function() {
   root_dir <- find_raw_root()
@@ -61,8 +62,9 @@ raw_get_SQL_database <- function() {
 
 #' writes a SQLite database initialization
 #' @param mydb database connection from DBI::dbConnect
-#' @param verbose logical to output extra information
+#' @param verbose Logical; if `TRUE`, print the names of created tables.
 #' @importFrom DBI dbCreateTable
+#' @return Invisibly, `TRUE` after the tables are created.
 #' @noRd
 .writeSQLdatabaseInit <- function(mydb, verbose=FALSE) {
   tbl <- .getSQLtableNames()
@@ -94,7 +96,8 @@ raw_get_SQL_database <- function() {
 
 
 #' reads the sqlHistory table
-#' @param mydb database connection from DBI::dbConnect
+#' @param mydb A database connection created by `DBI::dbConnect()`.
+#' @return A data frame containing the database history records.
 #' @importFrom DBI dbReadTable
 #' @noRd
 .readSQLhistory<- function(mydb) {
@@ -103,9 +106,10 @@ raw_get_SQL_database <- function() {
 }
 
 #' Prints the history of the SQLite database
-#' @param rawBase rawBase class
+#' @param rawBase An object containing the database location.
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom RSQLite SQLite
+#' @return Invisibly, `NULL`; the history is printed when the database exists.
 #' @noRd
 raw.showHistoryDB <- function(rawBase) {
   dbFilename = raw.getDatabase(rawBase)
@@ -119,10 +123,11 @@ raw.showHistoryDB <- function(rawBase) {
 }
 
 #' updates the sqlHistory table
-#' @param mydb database connection from DBI::dbConnect
-#' @param token a number representing the time
-#' @param description string with description of update
+#' @param mydb A database connection created by `DBI::dbConnect()`.
+#' @param token A numeric token identifying the update.
+#' @param description A description of the update.
 #' @importFrom DBI dbWriteTable
+#' @return Invisibly, `NULL`.
 #' @noRd
 .updateSQLhistory <- function(mydb, token, description) {
   tbl <- .getSQLtableNames()
@@ -140,6 +145,8 @@ raw.showHistoryDB <- function(rawBase) {
 
 
 #' Returns SQLite table names
+#'
+#' @return A list containing the AFM data and history table names.
 #' @noRd
 .getSQLtableNames <- function() {
   list(

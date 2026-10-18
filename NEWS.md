@@ -1,3 +1,5 @@
+# rawdata2 (development version)
+
 * make sure RCHECK passes
 * use `tools::R_user_dir()` for a project-based root
 

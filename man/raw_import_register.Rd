@@ -2,7 +2,7 @@
 % Please edit documentation in R/raw_register.R
 \name{raw_import_register}
 \alias{raw_import_register}
-\title{imports the RAWdata register}
+\title{Import compatible RAWdata registers}
 \usage{
 raw_import_register(recursive = FALSE)
 }
@@ -14,5 +14,5 @@ raw_import_register(recursive = FALSE)
 imported.
 }
 \description{
-imports the RAWdata register
+Import compatible RAWdata registers
 }

@@ -6,6 +6,13 @@
 \usage{
 raw_getCRC(filename)
 }
+\arguments{
+\item{filename}{A path to the file to checksum.}
+}
+\value{
+The shortened checksum as an integer, or \code{NA} when the file does not
+exist.
+}
 \description{
 Uses MD5 checksum or 32-byte MD5 hash for file, then shortens a bit
 to store as a simple integer

@@ -8,6 +8,8 @@ raw_file_by_id(ID, log = FALSE)
 }
 \arguments{
 \item{ID}{A numeric catalogue ID or a base64-style \code{ID2} value.}
+
+\item{log}{Logical; if \code{TRUE}, append the request to the RAW audit log.}
 }
 \value{
 The normalized path to the matching file, or \code{NA_character_} when

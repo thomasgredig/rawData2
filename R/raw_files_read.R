@@ -1,4 +1,5 @@
 #' Read the RAW file catalogue
+#' @param path Directory containing the RAW file catalogue.
 #' @return A data frame containing the RAW file catalogue. If the catalogue
 #'   does not exist, an empty data frame with the catalogue columns is returned.
 #' @importFrom utils read.csv

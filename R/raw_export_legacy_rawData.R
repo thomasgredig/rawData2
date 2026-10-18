@@ -2,7 +2,9 @@
 #' @description
 #' This is called from raw_init() and checks whether there is
 #' a legacy file system.
-#' @param root_dir root directory
+#' @param root_dir Directory containing the legacy `data` directory.
+#' @return Invisibly, `NULL`; a compatible legacy register is written when
+#'   one is found.
 #' @noRd
 raw_export_legacy_rawData <- function(root_dir) {
   folder_data = file.path(root_dir, "data")
@@ -33,4 +35,3 @@ raw_export_legacy_rawData <- function(root_dir) {
     write.csv(df, row.names = FALSE,file = fname)
   }
 }
-

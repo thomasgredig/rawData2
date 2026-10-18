@@ -1,5 +1,6 @@
 #' Retrieve a RAW filename by ID
 #' @param ID A numeric catalogue ID or a base64-style `ID2` value.
+#' @param log Logical; if `TRUE`, append the request to the RAW audit log.
 #' @return The normalized path to the matching file, or `NA_character_` when
 #'   the file cannot be found.
 #' @details Each request is appended to `RAW_log.txt` in the
@@ -96,6 +97,9 @@ raw_file_by_id <- function(ID, log=FALSE) {
 
 
 #' Append a raw_file_by_id request to the audit log
+#' @param ID The requested numeric or base64-style catalogue identifier.
+#' @param match_index The matched row index in `raw_files`.
+#' @param raw_files The RAW file catalogue used to resolve the request.
 #' @noRd
 raw_file_by_id_append_log <- function(ID, match_index, raw_files) {
   requested_id <- NA_character_

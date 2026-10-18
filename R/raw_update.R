@@ -4,6 +4,8 @@
 #' @param fastScan Logical; if `TRUE`, reuse a registered SHA-256 checksum
 #'   when the file has the same registered path and filesize. Files without a
 #'   matching path and filesize are still hashed.
+#' @param verify Logical; if `TRUE`, remove duplicate incomplete records before
+#'   scanning.
 #' @return Invisibly, the updated RAW file catalogue as a data frame. The
 #'   `filesize` column contains the size of each found file in bytes and is
 #'   `NA` for files that are not currently found.
@@ -251,7 +253,12 @@ rawFilesSave <- function(df_files) {
 
 
 
-#' helper function to remove paths
+#' Remove registered directory prefixes from file paths
+#'
+#' @param f A character vector of file paths.
+#' @param p A character vector of registered directory paths.
+#' @return A character vector of paths with the longest matching registered
+#'   directory removed.
 #' @noRd
 strip_directories <- function(f, p) {
   f <- unlist(f, use.names = FALSE)

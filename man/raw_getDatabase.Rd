@@ -2,10 +2,13 @@
 % Please edit documentation in R/raw_getDatabass.R
 \name{raw_getDatabase}
 \alias{raw_getDatabase}
-\title{returns name of database}
+\title{Return the path to the RAW SQLite database}
 \usage{
 raw_getDatabase()
 }
+\value{
+The path to the configured SQLite database file.
+}
 \description{
-returns name of database
+Return the path to the RAW SQLite database
 }

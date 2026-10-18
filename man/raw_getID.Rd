@@ -2,10 +2,21 @@
 % Please edit documentation in R/raw_getID.R
 \name{raw_getID}
 \alias{raw_getID}
-\title{Finds}
+\title{Calculate RAW identifiers and metadata for files}
 \usage{
 raw_getID(filename)
 }
+\arguments{
+\item{filename}{A non-empty character vector of file paths.}
+}
+\value{
+A data frame containing the calculated \code{ID2}, SHA-256 checksum,
+file size, and existence status for each input path.
+}
 \description{
-Finds
+Calculate RAW identifiers and metadata for files
+}
+\details{
+Existing files are hashed with SHA-256; missing files receive
+missing checksum and size values.
 }

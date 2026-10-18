@@ -15,8 +15,8 @@ raw_id_by_file(filename, ignore.case = FALSE, found_only = FALSE)
 found.}
 }
 \value{
-An integer vector of matching numeric RAW IDs. A zero-length vector
-is returned when no files match.
+A character vector of matching RAW identifiers. A zero-length
+vector is returned when no files match.
 }
 \description{
 Retrieve RAW file IDs by filename or partial filename

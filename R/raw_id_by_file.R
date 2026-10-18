@@ -3,8 +3,8 @@
 #' @param ignore.case Logical; should matching ignore case?
 #' @param found_only Logical; if `TRUE`, return only files currently marked as
 #'   found.
-#' @return An integer vector of matching numeric RAW IDs. A zero-length vector
-#'   is returned when no files match.
+#' @return A character vector of matching RAW identifiers. A zero-length
+#'   vector is returned when no files match.
 #' @export
 raw_id_by_file <- function(filename,
                            ignore.case = FALSE,
@@ -67,7 +67,6 @@ raw_file_record_by_id <- function(ID) {
 
   result
 }
-
 
 
 

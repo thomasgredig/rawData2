@@ -1,4 +1,10 @@
-#' Finds
+#' Calculate RAW identifiers and metadata for files
+#'
+#' @param filename A non-empty character vector of file paths.
+#' @return A data frame containing the calculated `ID2`, SHA-256 checksum,
+#'   file size, and existence status for each input path.
+#' @details Existing files are hashed with SHA-256; missing files receive
+#'   missing checksum and size values.
 #' @export
 raw_getID <- function(filename) {
   if (!is.character(filename) || length(filename) == 0L) {

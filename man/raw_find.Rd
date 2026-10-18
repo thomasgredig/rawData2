@@ -17,8 +17,8 @@ returned.}
 \item{type}{Reserved for compatibility; currently ignored.}
 }
 \value{
-An integer vector of matching numeric RAW IDs. A zero-length vector
-is returned when no filenames match.
+A character vector of matching RAW identifiers. A zero-length
+vector is returned when no filenames match.
 }
 \description{
 Find IDs from partial filenames

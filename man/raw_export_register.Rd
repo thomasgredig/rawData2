@@ -2,7 +2,7 @@
 % Please edit documentation in R/raw_register.R
 \name{raw_export_register}
 \alias{raw_export_register}
-\title{exports the RAWdata register to the target_path}
+\title{Export the RAWdata register to a directory}
 \usage{
 raw_export_register(target_path)
 }
@@ -14,5 +14,5 @@ The path to the exported register, or \code{NA_character_} when
 \code{target_path} does not exist.
 }
 \description{
-exports the RAWdata register to the target_path
+Export the RAWdata register to a directory
 }
