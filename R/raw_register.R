@@ -60,11 +60,26 @@ raw_import_register <- function(recursive=FALSE) {
 #' @param df2 The second RAW file catalogue data frame.
 #' @return A merged catalogue containing the columns from both inputs.
 raw_merge <- function(df1, df2) {
+  crc1 <- names(df1)[tolower(names(df1)) == "crc"][1]
+  crc2 <- names(df2)[tolower(names(df2)) == "crc"][1]
+  if (!is.na(crc1) && crc1 != "crc") {
+    names(df1)[names(df1) == crc1] <- "crc"
+  }
+  if (!is.na(crc2) && crc2 != "crc") {
+    names(df2)[names(df2) == crc2] <- "crc"
+  }
+
   if (!"filesize" %in% names(df1)) {
     df1$filesize <- NA_real_
   }
   if (!"filesize" %in% names(df2)) {
     df2$filesize <- NA_real_
+  }
+  if (!"crc" %in% names(df1)) {
+    df1$crc <- NA_real_
+  }
+  if (!"crc" %in% names(df2)) {
+    df2$crc <- NA_real_
   }
 
   columns <- union(names(df1), names(df2))
@@ -78,6 +93,11 @@ raw_merge <- function(df1, df2) {
   df2 <- df2[, columns, drop = FALSE]
 
   df <- rbind(df1,df2)
+  df <- df[, c(
+    "ID", "ID2", "file", "sha256", "found", "filesize", "crc",
+    setdiff(names(df), c("ID", "ID2", "file", "sha256", "found",
+                         "filesize", "crc"))
+  ), drop = FALSE]
   # df <- df[!duplicated(df$ID2),]
 
   # MERGE may have not computed all ID2 yet

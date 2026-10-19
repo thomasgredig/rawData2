@@ -15,8 +15,9 @@ raw_export_legacy_rawData <- function(root_dir) {
   if (file.exists(rawBase_file)) {
     # load data
     df_legacy <- read.csv(rawBase_file)
-    # > names(df)
-    # [1] "ID"       "size"     "missing"  "filename"
+    crc_column <- names(df_legacy)[
+      tolower(names(df_legacy)) == "crc"
+    ][1]
     n = nrow(df_legacy)
     df <- data.frame(
       ID = df_legacy$ID,
@@ -25,6 +26,11 @@ raw_export_legacy_rawData <- function(root_dir) {
       sha256 = rep(NA_character_, n),
       found = !df_legacy$missing,
       filesize = df_legacy$size,
+      crc = if (!is.na(crc_column)) {
+        as.numeric(df_legacy[[crc_column]])
+      } else {
+        rep(NA_real_, n)
+      },
       stringsAsFactors = FALSE
     )
 

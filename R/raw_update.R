@@ -7,8 +7,9 @@
 #' @param verify Logical; if `TRUE`, remove duplicate incomplete records before
 #'   scanning.
 #' @return Invisibly, the updated RAW file catalogue as a data frame. The
-#'   `filesize` column contains the size of each found file in bytes and is
-#'   `NA` for files that are not currently found.
+#'   `filesize` column contains the size of each found file in bytes and the
+#'   `crc` column contains an imported legacy CRC when available. Both are
+#'   `NA` when unavailable.
 #' @importFrom digest digest
 #' @importFrom dplyr distinct select mutate filter n row_number arrange group_by ungroup if_else left_join
 #' @importFrom utils write.csv setTxtProgressBar txtProgressBar
@@ -27,6 +28,26 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
   paths <- raw_paths_read()
   # Read the previous catalogue.
   old <- raw_files_read()
+
+  # Older update runs could leave duplicate CRC columns after joining the
+  # catalogue with its lookup table. Consolidate them before rebuilding rows.
+  crc_columns <- grep("^crc(\\.(x|y))+$", names(old), value = TRUE)
+  if (length(crc_columns) > 0L) {
+    crc_columns <- c(
+      intersect("crc", names(old)),
+      crc_columns
+    )
+    crc_values <- lapply(old[crc_columns], as.numeric)
+    old$crc <- Reduce(
+      function(current, candidate) {
+        ifelse(is.na(current), candidate, current)
+      },
+      crc_values
+    )
+    old <- old[, setdiff(names(old), crc_columns), drop = FALSE]
+  } else if (!"crc" %in% names(old)) {
+    old$crc <- NA_real_
+  }
 
   if (verify) {
     # find same ID, filename, and file size
@@ -54,12 +75,16 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
       file = character(),
       sha256 = character(),
       filesize = numeric(),
+      crc = numeric(),
       found = logical(),
       stringsAsFactors = FALSE
     )
   } else {
     if (!"filesize" %in% names(old)) {
       old$filesize <- NA_real_
+    }
+    if (!"crc" %in% names(old)) {
+      old$crc <- NA_real_
     }
 
     # Assume that previous files are not found until rediscovered.
@@ -165,6 +190,7 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
       file = strip_directories(files, paths$path),
       filesize = file_sizes,
       sha256 = checksums,
+      crc = NA_real_,
       stringsAsFactors = FALSE
     )
 
@@ -207,6 +233,7 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
         file = new_files$file,
         sha256 = new_files$sha256,
         filesize = new_files$filesize,
+        crc = new_files$crc,
         found = TRUE,
         stringsAsFactors = FALSE
       )

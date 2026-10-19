@@ -68,3 +68,31 @@ test_that("test registers",  suppressMessages({
   unlink(test_dir, recursive = TRUE, force = TRUE)
 }))
 
+test_that("legacy registers preserve CRC values", suppressMessages({
+  test_dir <- tempfile(pattern = "rawtestcrc-")
+  dir.create(file.path(test_dir, "data"), recursive = TRUE)
+  write.csv(
+    data.frame(
+      ID = 7L,
+      size = 123,
+      CRC = 148756670,
+      missing = FALSE,
+      filename = "legacy7.csv"
+    ),
+    file.path(test_dir, "data", "rawBase_index.csv"),
+    row.names = FALSE
+  )
+
+  rawdata2:::raw_export_legacy_rawData(test_dir)
+  register <- read.csv(
+    file.path(test_dir, ".rawdata2_legacy.csv"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(names(register), c(
+    "ID", "ID2", "file", "sha256", "found", "filesize", "crc"
+  ))
+  expect_equal(register$crc, 148756670)
+
+  unlink(test_dir, recursive = TRUE, force = TRUE)
+}))

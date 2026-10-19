@@ -1,5 +1,6 @@
 # rawdata2 (development version)
 
+* add CRC from legacy rawBase in rawData
 * make sure RCHECK passes
 * use `tools::R_user_dir()` for a project-based root
 

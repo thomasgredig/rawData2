@@ -19,8 +19,9 @@ scanning.}
 }
 \value{
 Invisibly, the updated RAW file catalogue as a data frame. The
-\code{filesize} column contains the size of each found file in bytes and is
-\code{NA} for files that are not currently found.
+\code{filesize} column contains the size of each found file in bytes and the
+\code{crc} column contains an imported legacy CRC when available. Both are
+\code{NA} when unavailable.
 }
 \description{
 Update the RAW file catalogue with SHA-256 checksums and file sizes
