@@ -6,3 +6,5 @@
 _main.R
 /docs
 rawdata2_imported_legacy.csv
+data/raw_paths.rda
+data/raw_files.rda

@@ -2,6 +2,7 @@
 
 export(find_raw_root)
 export(git_username)
+export(raw_config_read)
 export(raw_export_register)
 export(raw_extensions_append)
 export(raw_extensions_read)
@@ -24,6 +25,7 @@ export(raw_path_append)
 export(raw_path_trim)
 export(raw_paths_file)
 export(raw_paths_read)
+export(raw_save2package)
 export(raw_status)
 export(raw_update)
 importFrom(DBI,
@@ -58,6 +60,7 @@ importFrom(tools,
   R_user_dir,
   md5sum
 )
+importFrom(usethis,use_data)
 importFrom(utils,
   read.csv,
   read.delim,
