@@ -9,6 +9,8 @@ raw_file_by_id(ID, pkg = NULL, log = FALSE)
 \arguments{
 \item{ID}{A numeric catalogue ID or a base64-style \code{ID2} value.}
 
+\item{pkg}{package name}
+
 \item{log}{Logical; if \code{TRUE}, append the request to the RAW audit log.}
 }
 \value{

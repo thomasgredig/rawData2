@@ -1,5 +1,6 @@
 #' Retrieve a RAW filename by ID
 #' @param ID A numeric catalogue ID or a base64-style `ID2` value.
+#' @param pkg package name
 #' @param log Logical; if `TRUE`, append the request to the RAW audit log.
 #' @return The normalized path to the matching file, or `NA_character_` when
 #'   the file cannot be found.
@@ -8,8 +9,12 @@
 #' @export
 raw_file_by_id <- function(ID, pkg=NULL, log=FALSE) {
   match_index <- raw_idxByID(ID, pkg)
-
-  raw_files <- raw_files_read()
+  if (!is.null(pkg)) {
+    p <- file.path(tools::R_user_dir(pkg,which="data"), RAWDATA_FOLDER)
+  } else {
+    p = dirname(raw_paths_file())
+  }
+  raw_files <- raw_files_read(p)
   if (log) raw_file_by_id_append_log(ID, match_index, raw_files)
 
   filename <- raw_files$file[match_index]
@@ -21,7 +26,7 @@ raw_file_by_id <- function(ID, pkg=NULL, log=FALSE) {
     return(f)
   }
 
-  raw_paths <- raw_paths_read()
+  raw_paths <- raw_paths_read(p)
 
   if (nrow(raw_paths) == 0L || !"path" %in% names(raw_paths)) {
     warning("No RAW search paths are registered.")

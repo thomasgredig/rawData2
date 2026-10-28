@@ -4,7 +4,7 @@
 \alias{raw_paths_read}
 \title{Reads the RAW paths}
 \usage{
-raw_paths_read(clean = FALSE, all = FALSE)
+raw_paths_read(path = NULL, clean = FALSE, all = FALSE)
 }
 \arguments{
 \item{clean}{Logical; if \code{TRUE}, remove paths that no longer exist.}

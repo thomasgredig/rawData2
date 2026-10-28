@@ -28,8 +28,8 @@ raw_paths_file <- function() {
 #'   the logical `remote` column. If the catalogue does not exist, an empty
 #'   data frame is returned.
 #' @export
-raw_paths_read <- function(clean=FALSE, all=FALSE) {
-  file <- raw_paths_file()
+raw_paths_read <- function(path = NULL, clean=FALSE, all=FALSE) {
+  if (is.null(path)) { file <- raw_paths_file() } else { file <- file.path(path, FILE_PATHS) }
 
   if (!file.exists(file)) {
     return(data.frame(

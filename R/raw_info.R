@@ -21,6 +21,7 @@ raw_info <-function(ID, pkg=NULL) {
 
 #' Returns index in raw_files_read()
 #' @param ID A numeric catalogue ID or a base64-style `ID2` value
+#' @param pkg package name
 #' @return The matching row index, or `NA_character_` when no catalogue entry
 #'   matches.
 #' @noRd
@@ -29,7 +30,7 @@ raw_idxByID <- function(ID, pkg=NULL) {
     stop("'ID' must be a single non-missing value.")
   }
   if (!is.null(pkg)) {
-    p <- tools::R_user_dir(pgkname,which="data")
+    p <- file.path(tools::R_user_dir(pkg,which="data"), RAWDATA_FOLDER)
   } else {
     p = dirname(raw_paths_file())
   }
