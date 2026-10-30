@@ -1,6 +1,6 @@
 # rawdata2 (development version)
 
-* option to save data to package with `raw_save2package()`
+* option to save data to package with `raw_export2package()`
 * add CRC from legacy rawBase in rawData
 * make sure RCHECK passes
 * use `tools::R_user_dir()` for a project-based root

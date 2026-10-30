@@ -15,7 +15,7 @@ test_that("raw_update uses configured file extensions",  suppressMessages({
   #expect_false("custom.foo" %in% initial$filename)
 
   raw_extensions_append(".foo")
-  raw_update(verify=TRUE)
+  expect_warning( raw_update(verify=TRUE) ) # no rawBase_index.csv
   updated <- raw_list()
   expect_true("custom.foo" %in% updated$filename)
 

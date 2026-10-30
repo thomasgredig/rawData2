@@ -124,7 +124,7 @@ test_that("raw_update handles moving file to different directory", suppressMessa
   filename_new = sub("random_", "rnd_moved_", filename_new)
 
   expect_true( file.rename(from = filename_orig, to=filename_new) )
-  raw_update(verify=TRUE)
+  expect_warning( raw_update(verify=TRUE) )
   result <- raw_list()
   filename <- raw_file_by_id(ID2)
   expect_true( grepl(".*raw-dir2.*rnd_moved.*", filename) )

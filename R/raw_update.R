@@ -66,6 +66,124 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
       select(!filename)
   }
 
+  # check CRC and reassign ID as needed
+  if (verify) {
+    filename <- "data/rawBase_index.csv"
+    if(file.exists(filename)) {
+      filename_list <- basename(old$file)
+      old$check = NA
+
+      df_crc <- read.csv(filename)
+      cat("Comparing CRC codes ...")
+
+      for(idx in 1:nrow(df_crc)) {
+        cat(idx," ")
+        n1 <- df_crc[idx,]
+        ID <- n1$ID
+        idx2 <- which(old$ID==ID)
+        if (length(idx2) > 1L) {
+          warning("Skipping duplicated IDs:", ID)
+          next
+        }
+        if (length(idx2)==0L) {
+          # ID from rawData is not found in rawdata2,
+          # so find based on CRC code and filenames
+          found_file <- which(filename_list == df_crc$filename[idx])
+          if (length(found_file)==1L) {
+            if (old$filesize[found_file] == df_crc$size[idx]) {
+              ID2 <- old$ID2[found_file]
+              fname = raw_file_by_id(ID2)
+              crc_new = raw_getCRC(fname)
+              b <- n1$crc == crc_new
+              old$check[idx2] <- b
+              old$crc[idx2] = crc_new
+
+              next
+            } else {
+              warning("Found same filename, but not same file size for old ID: ", df_crc$ID[idx])
+            }
+          } else {
+            warning("Corresponding filename not found for ID: ", df_crc$ID[idx], "; (need to search by CRC)")
+          }
+        }
+        d <- old[idx2,]
+
+        if (nrow(d)==1L) {
+          if(is.na(d$crc)) {
+            # could be file that is not found
+            if(!is.na(d$ID2)) {
+              fname = raw_file_by_id(d$ID2)
+              if (file.exists(fname)) {
+                crc_new = raw_getCRC(fname)
+                b <- n1$crc == crc_new
+                old$check[idx2] <- b
+                old$crc[idx2] = crc_new
+              } else {
+                warning("File not found for ID: ", ID)
+              }
+            } else {
+              # check whether filenames are the same:
+              if(n1$filename == basename(d$file)) {
+                old$check[idx2] <- TRUE
+                old$crc[idx2] <- n1$crc
+              } else {
+                warning("File not found, and not the same filename, so update ID: ", d$ID)
+                old$ID[idx2] <- max(old$ID) + 1
+              }
+            }
+          } else { # no CRC
+            b <- n1$crc == d$crc
+            old$check[idx2] <- b
+          }
+        } else {
+          warning("Cannot read file for ID: ",ID )
+        }
+      }
+
+      # cycle through all the FALSE
+      m <- which(old$check==FALSE)
+      ID_max <- max(df_crc$ID, old$ID)
+      for(idx in m) {
+        d <- old[idx,]
+        found_ID <- which(d$crc == df_crc$crc)
+        if(length(found_ID)==1L) {
+          corrected_ID <- df_crc$ID[found_ID]
+          old$ID[idx] <- corrected_ID
+          old$check[idx] <- TRUE
+          if(old$filesize[idx] != df_crc$size[found_ID]) {
+            warning("File size inconsistent for ID2: ", old$ID2[idx], " Note: ", old$file[idx], " vs. ", df_crc$filename[found_ID])
+          }
+        } else {
+          if (length(found_ID)==0L) {
+            ID_max = ID_max + 1
+            old$ID[idx] <- ID_max
+            old$check[idx] <- TRUE
+          } else {
+            warning("Duplicated crc files found, merge IDs first:",df_crc$ID[found_ID])
+          }
+        }
+      }
+
+      # cycle through new files without CRC
+      m <- which(is.na(old$crc))
+      for(idx in m) {
+        fname <- raw_file_by_id(old$ID2[idx])
+        new_crc <- raw_getCRC(fname)
+        old$crc[idx] <- new_crc
+        found_ID <- which(df_crc$crc == new_crc)
+        if(length(found_ID)==1L) {
+          old$ID[idx] <- df_crc$ID[found_ID]
+          old$check[idx] <- TRUE
+          if(old$filesize[idx] != df_crc$size[found_ID]) {
+            warning("File size inconsistent for ID2: ", old$ID2[idx], " Note: ", old$file[idx], " vs. ", df_crc$filename[found_ID])
+          }
+        }
+      }
+      old$check <- NULL  # drop column
+    } else {
+      warning("rawBase_index.csv not found; generate with rawData::raw.export_index() first.")
+    }
+  }
 
   # create a DF if nothing exists
   if (nrow(old) == 0) {

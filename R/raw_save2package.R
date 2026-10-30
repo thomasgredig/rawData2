@@ -1,7 +1,7 @@
 #' Saves all relevant data to the package
 #' @importFrom usethis use_data
 #' @export
-raw_save2package <- function() {
+raw_export2package <- function() {
   # check whether there is data
   root_dir <- find_raw_root()
   if (!dir.exists(root_dir)) {
@@ -23,6 +23,9 @@ raw_save2package <- function() {
   usethis::use_data(raw_paths,
                     raw_files,
                     raw_config, internal=FALSE, overwrite=TRUE)
+
+  raw_files |> mutate(filename = basename(file)) |> select(ID,ID2,crc,filesize,filename) -> d
+  write.csv(d, "data/RAW.csv", row.names = FALSE)
 }
 
 #' @export

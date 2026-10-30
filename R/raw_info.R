@@ -14,6 +14,7 @@ raw_info <-function(ID, pkg=NULL) {
     filesize = d$filesize,
     sha256 = d$sha256,
     found = d$found,
+    crc = d$crc,
     fullname = full_filename
   )
 }
