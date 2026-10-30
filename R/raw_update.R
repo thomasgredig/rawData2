@@ -75,9 +75,12 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
 
       df_crc <- read.csv(filename)
       cat("Comparing CRC codes ...")
+      if (interactive()) { pb <- txtProgressBar(min = 1, max = nrow(df_crc), style = 3) }
 
       for(idx in 1:nrow(df_crc)) {
-        cat(idx," ")
+        # cat(idx," ")
+        if (interactive()) { setTxtProgressBar(pb, idx) }
+
         n1 <- df_crc[idx,]
         ID <- n1$ID
         idx2 <- which(old$ID==ID)
@@ -139,6 +142,7 @@ raw_update <- function(paths = c(), fastScan = TRUE, verify=FALSE) {
           warning("Cannot read file for ID: ",ID )
         }
       }
+      if (interactive()) { close(pb) }
 
       # cycle through all the FALSE
       m <- which(old$check==FALSE)
